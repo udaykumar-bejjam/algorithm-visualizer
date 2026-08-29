@@ -13,6 +13,7 @@ class VisualizationViewer extends BaseComponent {
     super(props);
 
     this.frameCache = new Map();
+    this.fadeRef = React.createRef();
     this.reset();
   }
 
@@ -30,6 +31,16 @@ class VisualizationViewer extends BaseComponent {
     this.update(chunks, cursor);
   }
 
+  triggerChunkMotion() {
+    if (!this.props.motionEnabled) return;
+    const el = this.fadeRef.current;
+    if (!el) return;
+    el.classList.remove(styles.pulse);
+    // Force reflow so the chunk-ease animation can restart.
+    void el.offsetWidth;
+    el.classList.add(styles.pulse);
+  }
+
   componentDidUpdate(prevProps) {
     const { chunks, cursor } = this.props.player;
     const { chunks: oldChunks, cursor: oldCursor } = prevProps.player;
@@ -39,10 +50,12 @@ class VisualizationViewer extends BaseComponent {
     if (chunks !== oldChunks) {
       this.clearFrameCache();
       this.update(chunks, cursor, [], 0);
+      this.triggerChunkMotion();
       return;
     }
     if (cursor !== oldCursor) {
       this.update(chunks, cursor, oldChunks, oldCursor);
+      this.triggerChunkMotion();
     }
   }
 
@@ -129,14 +142,13 @@ class VisualizationViewer extends BaseComponent {
 
   render() {
     const { className } = this.props;
-    const { cursor } = this.props.player;
 
     return (
       <div
         className={classes(styles.visualization_viewer, className)}
         data-visualization-viewer
       >
-        <div className={styles.fade} key={cursor}>
+        <div className={styles.fade} ref={this.fadeRef}>
           {
             this.root && this.root.render()
           }
@@ -146,6 +158,10 @@ class VisualizationViewer extends BaseComponent {
   }
 }
 
-export default connect(({ player, env }) => ({ player, theme: env.theme }), actions)(
+export default connect(({ player, env }) => ({
+  player,
+  theme: env.theme,
+  motionEnabled: env.motionEnabled,
+}), actions)(
   VisualizationViewer,
 );

@@ -86,7 +86,7 @@ Layout classes must also be exported from `core/layouts` to be constructible via
 ## Useful mental models
 
 - **Files in the editor are not “the program” alone** — JSON files can be raw command dumps; md builds a markdown tracer; code builds via language tracers.
-- **Playback is discrete frames**, not continuous animation between states.
+- **Playback is discrete frames**, with optional CSS easing between chunk updates when Motion is enabled.
 - **Tracers are mutable models**; renderers read them each React render.
 
 ## Docs map

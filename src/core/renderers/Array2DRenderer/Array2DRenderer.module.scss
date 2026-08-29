@@ -16,23 +16,45 @@
       background-color: $theme-normal;
       border: 1px solid $theme-light;
       padding: 0 4px;
+      transition:
+        background-color var(--motion-duration) var(--motion-easing),
+        color var(--motion-duration) var(--motion-easing),
+        box-shadow var(--motion-duration) var(--motion-easing);
 
       .value {
         font-size: 12px;
+        transition: transform var(--motion-duration) var(--motion-easing);
+        display: inline-block;
       }
 
       &.selected {
         background-color: $color-selected;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+
+        .value {
+          transform: scale(1.08);
+        }
       }
 
       &.patched {
         background-color: $color-patched;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+        .value {
+          transform: scale(1.08);
+        }
       }
 
       &.index {
         background: none;
         border: none;
         color: $theme-light;
+        box-shadow: none;
+        transition: none;
+
+        .value {
+          transform: none;
+        }
       }
     }
   }
