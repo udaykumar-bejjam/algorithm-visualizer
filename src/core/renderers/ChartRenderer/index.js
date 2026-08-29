@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import Array1DRenderer from '../Array1DRenderer';
-import styles from './ChartRenderer.module.scss';
+import { colorFont, colorPatched, colorSelected } from 'common/theme';
 
 class ChartRenderer extends Array1DRenderer {
   renderData() {
@@ -10,7 +10,7 @@ class ChartRenderer extends Array1DRenderer {
     const chartData = {
       labels: row.map(col => `${col.value}`),
       datasets: [{
-        backgroundColor: row.map(col => col.patched ? styles.colorPatched : col.selected ? styles.colorSelected : styles.colorFont),
+        backgroundColor: row.map(col => col.patched ? colorPatched : col.selected ? colorSelected : colorFont),
         data: row.map(col => col.value),
       }],
     };
@@ -33,4 +33,3 @@ class ChartRenderer extends Array1DRenderer {
 }
 
 export default ChartRenderer;
-

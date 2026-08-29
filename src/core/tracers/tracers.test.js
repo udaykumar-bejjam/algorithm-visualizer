@@ -1,8 +1,6 @@
-/**
- * @jest-environment node
- */
+import { describe, it, expect, vi } from 'vitest';
 
-jest.mock('./Tracer', () => {
+vi.mock('./Tracer', () => {
   class Tracer {
     constructor(key, getObject, title) {
       this.key = key;
@@ -24,15 +22,15 @@ jest.mock('./Tracer', () => {
       return null;
     }
   }
-  return { __esModule: true, default: Tracer };
+  return { default: Tracer };
 });
 
-jest.mock('../renderers', () => ({
+vi.mock('../renderers', () => ({
   GraphRenderer: class GraphRenderer {},
 }));
 
-const TreeTracer = require('./TreeTracer').default;
-const LinkedListTracer = require('./LinkedListTracer').default;
+import TreeTracer from './TreeTracer';
+import LinkedListTracer from './LinkedListTracer';
 
 describe('TreeTracer', () => {
   it('builds a binary tree from nested arrays', () => {

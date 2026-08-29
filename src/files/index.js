@@ -1,13 +1,18 @@
 import { createProjectFile, createUserFile } from 'common/util';
 
-const getName = filePath => filePath.split('/').pop();
-const getContent = filePath => require('!raw-loader!./' + filePath).default;
-const readProjectFile = filePath => createProjectFile(getName(filePath), getContent(filePath));
-const readUserFile = filePath => createUserFile(getName(filePath), getContent(filePath));
+import codeCpp from './skeletons/code.cpp?raw';
+import codeJava from './skeletons/code.java?raw';
+import codeJs from './skeletons/code.js?raw';
+import rootReadme from './algorithm-visualizer/README.md?raw';
+import scratchReadme from './scratch-paper/README.md?raw';
+import apiReference from './api-reference.md?raw';
 
-export const CODE_CPP = readUserFile('skeletons/code.cpp');
-export const CODE_JAVA = readUserFile('skeletons/code.java');
-export const CODE_JS = readUserFile('skeletons/code.js');
-export const ROOT_README_MD = readProjectFile('algorithm-visualizer/README.md');
-export const SCRATCH_PAPER_README_MD = readProjectFile('scratch-paper/README.md');
-export const API_REFERENCE_MD = getContent('api-reference.md');
+const readProjectFile = (name, content) => createProjectFile(name, content);
+const readUserFile = (name, content) => createUserFile(name, content);
+
+export const CODE_CPP = readUserFile('code.cpp', codeCpp);
+export const CODE_JAVA = readUserFile('code.java', codeJava);
+export const CODE_JS = readUserFile('code.js', codeJs);
+export const ROOT_README_MD = readProjectFile('README.md', rootReadme);
+export const SCRATCH_PAPER_README_MD = readProjectFile('README.md', scratchReadme);
+export const API_REFERENCE_MD = apiReference;

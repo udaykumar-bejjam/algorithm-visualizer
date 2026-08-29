@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { combineReducers, createStore } from 'redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -9,7 +9,8 @@ import './stylesheet.scss';
 
 const store = createStore(combineReducers({ current, directory, env, player, toast }));
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
@@ -18,11 +19,12 @@ ReactDOM.render(
         <Route path="/" component={App}/>
       </Switch>
     </BrowserRouter>
-  </Provider>, document.getElementById('root'));
+  </Provider>,
+);
 
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`).catch(() => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
       // Service worker optional
     });
   });

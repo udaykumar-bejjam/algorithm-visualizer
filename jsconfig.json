@@ -1,6 +1,18 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "baseUrl": "src"
-  }
+    "baseUrl": "src",
+    "paths": {
+      "components": ["components"],
+      "components/*": ["components/*"],
+      "apis": ["apis"],
+      "apis/*": ["apis/*"],
+      "common/*": ["common/*"],
+      "core/*": ["core/*"],
+      "files": ["files"],
+      "files/*": ["files/*"],
+      "reducers": ["reducers"],
+      "reducers/*": ["reducers/*"]
+    }
+  },
+  "exclude": ["node_modules", "build"]
 }

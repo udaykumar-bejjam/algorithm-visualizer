@@ -20,10 +20,10 @@ Are you a first-timer in contributing to open source? [These guidelines](https:/
 3. Choose whether to run [`server`](https://github.com/algorithm-visualizer/server) on your machine or to use the remote server.
     - If you choose to run the server locally as well, follow the instructions [here](https://github.com/algorithm-visualizer/server/blob/master/CONTRIBUTING.md#running-locally).
 
-    - If you choose to use the remote server, **temporarily** (i.e., don't commit this change) modify `package.json` as follows:
+    - If you choose to use the remote server, **temporarily** (i.e., don't commit this change) modify `vite.config.js` proxy target:
         ```diff
-        - "proxy": "http://localhost:8080",
-        + "proxy": "https://algorithm-visualizer.org",
+        - target: 'http://localhost:8080',
+        + target: 'https://algorithm-visualizer.org',
         ```
 
 4. Install dependencies, and run the web app.

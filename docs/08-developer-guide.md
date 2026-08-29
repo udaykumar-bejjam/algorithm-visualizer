@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node (historically `>=10.15.3`; prefer a version compatible with `node-sass@4` or migrate to `sass` first — see roadmap P1.1)
+- Node `>=18`
 - npm
 - Optional: local [`server`](https://github.com/algorithm-visualizer/server) on port 8080
 
@@ -12,23 +12,23 @@
 git clone <your-fork>/algorithm-visualizer.git
 cd algorithm-visualizer
 npm install
-npm start   # http://localhost:3000
+npm start   # Vite → http://localhost:3000
 ```
 
 ### Frontend only (remote API)
 
-Temporarily in `package.json`:
+Temporarily in `vite.config.js`:
 
 ```diff
-- "proxy": "http://localhost:8080",
-+ "proxy": "https://algorithm-visualizer.org",
+- target: 'http://localhost:8080',
++ target: 'https://algorithm-visualizer.org',
 ```
 
 Do not commit that change.
 
 ### With local server
 
-Follow server `CONTRIBUTING.md`, then keep proxy at `http://localhost:8080`.
+Follow server `CONTRIBUTING.md`, then keep the Vite proxy target at `http://localhost:8080`.
 
 ### Gitpod
 
@@ -38,12 +38,13 @@ Open the repo in Gitpod (`.gitpod.yml` clones server, writes dummy env, starts b
 
 | Topic | Convention |
 |-------|------------|
-| Imports | Bare from `src` (`components`, `apis`, `core/tracers`, …) via jsconfig |
+| Imports | Bare from `src` (`components`, `apis`, `core/tracers`, …) via Vite aliases |
 | Components | Class components; shared errors via `BaseComponent` |
-| Styles | `*.module.scss` co-located; tokens in `common/stylesheet` |
+| Styles | `*.module.scss` co-located; tokens in `common/stylesheet` / `common/theme.js` |
 | State | Redux actions from `reducers` barrel; connect at leaf |
 | Files | `{ name, content, contributors? }` |
 | Tracer commands | Export **name** on barrel === constructor `method` string |
+| Build | Vite (`npm start` / `npm run build` / `npm test` via Vitest) |
 
 ## How to add a UI component
 
