@@ -12,6 +12,7 @@
 
   .workspace {
     flex: 1;
+    min-height: 0;
 
     .visualization_viewer {
       background-color: $theme-dark;
@@ -31,6 +32,10 @@
   &.mobile {
     .workspace {
       min-height: 0;
+    }
+
+    .toast_container {
+      bottom: 56px;
     }
   }
 }

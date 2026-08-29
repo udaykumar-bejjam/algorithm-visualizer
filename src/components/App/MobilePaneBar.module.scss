@@ -1,0 +1,37 @@
+@import "~common/stylesheet/index";
+
+.mobile_pane_bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  border-top: 1px solid $theme-light;
+  background-color: $theme-dark;
+  min-height: 48px;
+  padding: env(safe-area-inset-bottom, 0) 0 0;
+
+  .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border: 0;
+    background: transparent;
+    color: $color-font;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 48px;
+
+    &.selected {
+      color: $color-active;
+      box-shadow: inset 0 3px 0 $color-active;
+      background-color: $color-overlay;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: -2px;
+    }
+  }
+}

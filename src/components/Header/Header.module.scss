@@ -57,11 +57,32 @@
           margin-top: $line-height;
         }
 
-        &:hover {
+        &:hover,
+        &:focus-within {
           .dropdown {
             display: flex;
           }
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 899px) {
+  .header {
+    .row {
+      padding: 0 8px;
+
+      .section {
+        height: auto;
+        min-height: $line-height;
+        flex-wrap: wrap;
+        max-width: 100%;
+      }
+
+      .title_bar {
+        font-size: $font-size-normal;
+        max-width: 100%;
       }
     }
   }

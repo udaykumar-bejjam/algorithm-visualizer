@@ -20,18 +20,23 @@ import { actions } from 'reducers';
 import { classes, createUserFile, extension, refineGist } from 'common/util';
 import { exts, languages } from 'common/config';
 import { API_REFERENCE_MD, SCRATCH_PAPER_README_MD } from 'files';
+import MobilePaneBar, { visiblesForMobilePane } from './MobilePaneBar';
 import styles from './App.module.scss';
+
+const MOBILE_BREAKPOINT = 900;
 
 class App extends BaseComponent {
   constructor(props) {
     super(props);
 
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 900;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT;
+    const mobilePane = 'visualization';
     this.state = {
-      workspaceVisibles: [!isMobile, true, true],
+      workspaceVisibles: isMobile ? visiblesForMobilePane(mobilePane) : [true, true, true],
       workspaceWeights: [1, 2, 2],
       apiReferenceOpened: false,
       isMobile,
+      mobilePane,
     };
 
     this.codeEditorRef = React.createRef();
@@ -43,6 +48,7 @@ class App extends BaseComponent {
     this.handleResize = this.handleResize.bind(this);
     this.openApiReference = this.openApiReference.bind(this);
     this.closeApiReference = this.closeApiReference.bind(this);
+    this.handleMobilePaneChange = this.handleMobilePaneChange.bind(this);
   }
 
   componentDidMount() {
@@ -196,6 +202,9 @@ class App extends BaseComponent {
     fetch()
       .then(() => {
         this.selectDefaultTab();
+        if (this.state.isMobile) {
+          this.handleMobilePaneChange('visualization');
+        }
         return null; // to suppress unnecessary bluebird warning
       })
       .catch(error => {
@@ -219,7 +228,18 @@ class App extends BaseComponent {
     this.codeEditorRef.current.handleResize();
   }
 
+  handleMobilePaneChange(mobilePane) {
+    this.setState({
+      mobilePane,
+      workspaceVisibles: visiblesForMobilePane(mobilePane),
+    });
+  }
+
   toggleNavigatorOpened(navigatorOpened = !this.state.workspaceVisibles[0]) {
+    if (this.state.isMobile) {
+      this.handleMobilePaneChange(navigatorOpened ? 'navigator' : 'visualization');
+      return;
+    }
     const workspaceVisibles = [...this.state.workspaceVisibles];
     workspaceVisibles[0] = navigatorOpened;
     this.setState({ workspaceVisibles });
@@ -230,11 +250,21 @@ class App extends BaseComponent {
   }
 
   handleResize() {
-    const isMobile = window.innerWidth < 900;
+    const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
     if (isMobile === this.state.isMobile) return;
-    const workspaceVisibles = [...this.state.workspaceVisibles];
-    if (isMobile) workspaceVisibles[0] = false;
-    this.setState({ isMobile, workspaceVisibles });
+    if (isMobile) {
+      const mobilePane = this.state.mobilePane || 'visualization';
+      this.setState({
+        isMobile,
+        mobilePane,
+        workspaceVisibles: visiblesForMobilePane(mobilePane),
+      });
+      return;
+    }
+    this.setState({
+      isMobile,
+      workspaceVisibles: [true, true, true],
+    });
   }
 
   openApiReference() {
@@ -246,7 +276,7 @@ class App extends BaseComponent {
   }
 
   render() {
-    const { workspaceVisibles, workspaceWeights, apiReferenceOpened, isMobile } = this.state;
+    const { workspaceVisibles, workspaceWeights, apiReferenceOpened, isMobile, mobilePane } = this.state;
     const { titles, description, saved } = this.props.current;
 
     const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
@@ -269,6 +299,9 @@ class App extends BaseComponent {
             <CodeEditor ref={this.codeEditorRef}/>
           </TabContainer>
         </ResizableContainer>
+        {isMobile && (
+          <MobilePaneBar activePane={mobilePane} onChange={this.handleMobilePaneChange}/>
+        )}
         <ToastContainer className={styles.toast_container}/>
         {
           apiReferenceOpened &&

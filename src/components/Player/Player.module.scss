@@ -1,6 +1,11 @@
 @import "~common/stylesheet/index";
 
 .player {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  max-width: 100%;
+
   .progress_bar {
     width: 160px;
   }
@@ -80,6 +85,23 @@
         display: block;
         position: absolute;
       }
+    }
+  }
+}
+
+@media (max-width: 899px) {
+  .player {
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    .progress_bar {
+      width: 96px;
+      flex: 1 1 96px;
+      min-width: 72px;
+    }
+
+    .speed {
+      padding: 0 8px;
     }
   }
 }

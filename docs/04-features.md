@@ -5,6 +5,7 @@
 | Feature | Description | Primary code |
 |---------|-------------|--------------|
 | Three-pane layout | Navigator / visualization / editor; resizable weights | `App`, `ResizableContainer` |
+| Mobile panes | Narrow screens show one pane + Algorithms / Visualize / Code tabs | `App`, `MobilePaneBar` |
 | Collapse navigator | Click header title bar | `App.handleClickTitleBar` |
 | Document title | Helmet title; `(Unsaved)` prefix when dirty | `App.render` |
 | Toasts | Success/error; auto-hide ~3s | `ToastContainer`, `BaseComponent` |
@@ -93,7 +94,7 @@
 
 ## PWA / SEO
 
-- Web app manifest (fullscreen landscape)
+- Web app manifest (standalone, any orientation)
 - Open Graph image in `index.html`
 - robots disallow scratch papers
-- No service worker / offline support
+- Service worker (`public/sw.js`) caches a minimal offline shell in production

@@ -23,7 +23,8 @@ Complete inventory of the repository for navigation and ownership.
 | Path | Role |
 |------|------|
 | `index.html` | Shell; GA; `$TITLE` / `$DESCRIPTION` / `$ALGORITHM` placeholders |
-| `manifest.json` | PWA manifest (fullscreen, landscape) — no service worker |
+| `manifest.json` | PWA manifest (fullscreen, `orientation: any`) |
+| `sw.js` | Offline shell service worker |
 | `robots.txt` | Disallows `/scratch-paper/` |
 | `favicon.png`, `icons/*` | App icons |
 

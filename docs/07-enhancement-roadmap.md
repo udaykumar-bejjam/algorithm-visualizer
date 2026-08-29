@@ -46,11 +46,11 @@ Prioritized improvements based on a full codebase review. Difficulty is expresse
 | P3.1 | Auto-rebuild debounce for code edits (optional toggle) | Today code edits need manual Build; easy to miss | Medium |
 | P3.2 | Export visualization as GIF/WebM / share link preview | Teaching & social | **Done** — Player Export menu (JSON / GIF / WebM); share-link preview still open |
 | P3.3 | Dark/light theme tokens + accessibility pass | Contrast, keyboard (Button is often a `<div>`) | **Done** — CSS theme tokens, Settings toggle, focus-visible + icon button labels |
-| P3.4 | Mobile / portrait layout | Manifest forces landscape; panes unusable on phones | Large — layout system |
+| P3.4 | Mobile / portrait layout | Manifest forces landscape; panes unusable on phones | **Done** — single-pane mobile switcher, portrait-friendly header/player, `orientation: any` |
 | P3.5 | Python (or more languages) tracer support | Community demand; needs server + tracers.* + config | Large — multi-repo |
 | P3.6 | Step breakpoints / watch expressions | Power-user debugging of algorithms | Large |
 | P3.7 | Collaborative scratch paper (live cursors) | Education classrooms | Large |
-| P3.8 | Offline / true PWA with service worker | Manifest exists but no SW | Medium |
+| P3.8 | Offline / true PWA with service worker | Manifest exists but no SW | **Done** — `public/sw.js` registered in production |
 | P3.9 | In-app tracer API docs / snippets palette | Reduces wiki dependency | Medium |
 | P3.10 | Deterministic random layouts (seed in delay/chunk) | Stable scrubbing | Small–medium |
 
