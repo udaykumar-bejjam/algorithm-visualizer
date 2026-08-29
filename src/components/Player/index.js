@@ -9,6 +9,11 @@ import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
 import faDownload from '@fortawesome/fontawesome-free-solid/faDownload';
 import { classes, extension, chunkCommands, validateCommands } from 'common/util';
+import {
+  captureFrameSequence,
+  encodeAndDownloadGif,
+  encodeAndDownloadWebM,
+} from 'common/exportMedia';
 import { TracerApi } from 'apis';
 import { actions } from 'reducers';
 import { BaseComponent, Button, ProgressBar } from 'components';
@@ -25,6 +30,8 @@ class Player extends BaseComponent {
       speed: 2,
       playing: false,
       building: false,
+      exporting: false,
+      exportMenuOpen: false,
     };
 
     this.tracerApiSource = null;
@@ -228,6 +235,7 @@ class Player extends BaseComponent {
       this.handleError(new Error('Nothing to export. Build a visualization first.'));
       return;
     }
+    this.setState({ exportMenuOpen: false });
     const blob = new Blob([JSON.stringify(commands, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -238,15 +246,57 @@ class Player extends BaseComponent {
     this.props.showSuccessToast('Exported visualization.json');
   }
 
+  toggleExportMenu() {
+    this.setState(state => ({ exportMenuOpen: !state.exportMenuOpen }));
+  }
+
+  async exportMedia(format) {
+    const { chunks, cursor } = this.props.player;
+    if (!chunks.length) {
+      this.handleError(new Error('Nothing to export. Build a visualization first.'));
+      return;
+    }
+    if (this.state.exporting) return;
+
+    this.pause();
+    this.setState({ exporting: format, exportMenuOpen: false });
+    const previousCursor = cursor;
+
+    try {
+      const interval = 4000 / Math.pow(Math.E, this.state.speed);
+      const frames = await captureFrameSequence({
+        total: chunks.length,
+        goTo: nextCursor => this.props.setCursor(nextCursor),
+        delayMs: Math.min(120, Math.max(40, interval / 8)),
+      });
+
+      if (format === 'gif') {
+        await encodeAndDownloadGif(frames, { delayMs: Math.round(interval) });
+        this.props.showSuccessToast('Exported algorithm-visualizer.gif');
+      } else {
+        await encodeAndDownloadWebM(frames, {
+          fps: Math.max(2, Math.min(20, Math.round(1000 / interval))),
+        });
+        this.props.showSuccessToast('Exported algorithm-visualizer.webm');
+      }
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.props.setCursor(previousCursor);
+      this.setState({ exporting: false });
+    }
+  }
+
   render() {
     const { className } = this.props;
     const { editingFile } = this.props.current;
     const { chunks, cursor, breakpoints } = this.props.player;
-    const { speed, playing, building } = this.state;
+    const { speed, playing, building, exporting, exportMenuOpen } = this.state;
+    const busy = building || Boolean(exporting);
 
     return (
       <div className={classes(styles.player, className)}>
-        <Button icon={faWrench} primary disabled={building} inProgress={building}
+        <Button icon={faWrench} primary disabled={busy} inProgress={building}
                 onClick={() => this.build(editingFile)}>
           {building ? 'Building' : 'Build'}
         </Button>
@@ -254,17 +304,40 @@ class Player extends BaseComponent {
           playing ? (
             <Button icon={faPause} primary active onClick={() => this.pause()}>Pause</Button>
           ) : (
-            <Button icon={faPlay} primary onClick={() => this.resume(true)}>Play</Button>
+            <Button icon={faPlay} primary disabled={busy} onClick={() => this.resume(true)}>Play</Button>
           )
         }
-        <Button icon={faChevronLeft} primary disabled={!this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
+        <Button icon={faChevronLeft} primary disabled={busy || !this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
         <ProgressBar className={styles.progress_bar} current={cursor} total={chunks.length}
                      breakpoints={breakpoints}
                      onChangeProgress={progress => this.handleChangeProgress(progress)}
                      onToggleBreakpoint={progress => this.handleToggleBreakpoint(progress)}/>
-        <Button icon={faChevronRight} reverse primary disabled={!this.isValidCursor(cursor + 1)}
+        <Button icon={faChevronRight} reverse primary disabled={busy || !this.isValidCursor(cursor + 1)}
                 onClick={() => this.next()}/>
-        <Button icon={faDownload} primary onClick={() => this.exportCommands()}>Export</Button>
+        <div className={styles.export}>
+          <Button
+            icon={faDownload}
+            primary
+            disabled={busy}
+            inProgress={Boolean(exporting)}
+            onClick={() => this.toggleExportMenu()}
+          >
+            {exporting === 'gif' ? 'GIF…' : exporting === 'webm' ? 'WebM…' : 'Export'}
+          </Button>
+          {exportMenuOpen && !exporting && (
+            <div className={styles.export_menu} role="menu">
+              <button type="button" role="menuitem" onClick={() => this.exportCommands()}>
+                JSON commands
+              </button>
+              <button type="button" role="menuitem" onClick={() => this.exportMedia('gif')}>
+                GIF animation
+              </button>
+              <button type="button" role="menuitem" onClick={() => this.exportMedia('webm')}>
+                WebM video
+              </button>
+            </div>
+          )}
+        </div>
         <div className={styles.speed}>
           Speed
           <InputRange

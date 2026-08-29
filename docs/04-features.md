@@ -58,6 +58,9 @@
 | Step prev / next | Manual cursor | `Player.prev` / `next` |
 | Scrub | Progress bar drag | `ProgressBar`, `handleChangeProgress` |
 | Speed | 0–4; interval `4000 / e^speed` | `Player` |
+| Export JSON | Download command list as `visualization.json` | `Player.exportCommands` |
+| Export GIF / WebM | Step through frames, capture viewer DOM, download animation | `Player.exportMedia`, `common/exportMedia` |
+| Breakpoints | Double-click progress bar to toggle stop points | `Player`, `ProgressBar` |
 | Unsupported language | Toast error | `Player.build` |
 
 ## Visualization types

@@ -129,7 +129,10 @@ class VisualizationViewer extends BaseComponent {
     const { cursor } = this.props.player;
 
     return (
-      <div className={classes(styles.visualization_viewer, className)}>
+      <div
+        className={classes(styles.visualization_viewer, className)}
+        data-visualization-viewer
+      >
         <div className={styles.fade} key={cursor}>
           {
             this.root && this.root.render()

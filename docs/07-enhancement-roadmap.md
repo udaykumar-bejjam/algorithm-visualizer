@@ -44,7 +44,7 @@ Prioritized improvements based on a full codebase review. Difficulty is expresse
 | ID | Enhancement | Why | Scope |
 |----|-------------|-----|-------|
 | P3.1 | Auto-rebuild debounce for code edits (optional toggle) | Today code edits need manual Build; easy to miss | Medium |
-| P3.2 | Export visualization as GIF/WebM / share link preview | Teaching & social | Large — new pipeline |
+| P3.2 | Export visualization as GIF/WebM / share link preview | Teaching & social | **Done** — Player Export menu (JSON / GIF / WebM); share-link preview still open |
 | P3.3 | Dark/light theme tokens + accessibility pass | Contrast, keyboard (Button is often a `<div>`) | Medium |
 | P3.4 | Mobile / portrait layout | Manifest forces landscape; panes unusable on phones | Large — layout system |
 | P3.5 | Python (or more languages) tracer support | Community demand; needs server + tracers.* + config | Large — multi-repo |

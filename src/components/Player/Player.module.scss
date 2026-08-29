@@ -5,6 +5,39 @@
     width: 160px;
   }
 
+  .export {
+    position: relative;
+
+    .export_menu {
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      z-index: 5;
+      min-width: 160px;
+      margin-bottom: 4px;
+      padding: 4px 0;
+      background-color: $theme-dark;
+      border: 1px solid $color-shadow;
+      box-shadow: 0 4px 12px $color-shadow;
+
+      button {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        border: 0;
+        background: transparent;
+        color: $color-font;
+        text-align: left;
+        cursor: pointer;
+        font: inherit;
+
+        &:hover {
+          background-color: $color-shadow;
+        }
+      }
+    }
+  }
+
   .speed {
     display: flex;
     align-items: center;
