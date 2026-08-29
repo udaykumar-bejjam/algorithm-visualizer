@@ -1,0 +1,15 @@
+{
+  "name": "Algorithm Visualizer",
+  "install": "npm install",
+  "terminals": [
+    {
+      "name": "dev-server",
+      "command": "npm start"
+    }
+  ],
+  "ports": [
+    {
+      "port": 3000
+    }
+  ]
+}
