@@ -10,6 +10,18 @@ class MarkdownTracer extends Tracer {
     this.markdown = markdown;
     super.set();
   }
+
+  captureState() {
+    return {
+      ...super.captureState(),
+      markdown: this.markdown || '',
+    };
+  }
+
+  restoreState(state) {
+    super.restoreState(state);
+    this.markdown = state.markdown || '';
+  }
 }
 
 export default MarkdownTracer;

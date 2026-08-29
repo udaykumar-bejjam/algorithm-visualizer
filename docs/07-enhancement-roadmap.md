@@ -31,7 +31,7 @@ Prioritized improvements based on a full codebase review. Difficulty is expresse
 
 | ID | Enhancement | Why | Scope |
 |----|-------------|-----|-------|
-| P2.1 | Immutable frame snapshots per chunk | Rewind currently O(n) full replay; `layoutRandom` non-deterministic | Large — Player + Viewer |
+| P2.1 | Immutable frame snapshots per chunk | Rewind currently O(n) full replay; `layoutRandom` non-deterministic | **Done** — capture/restore frame cache in VisualizationViewer |
 | P2.2 | Formal command schema (JSON Schema / TS types) shared with tracers.* | Silent runtime failures on bad commands | Medium |
 | P2.3 | Move async to Redux Toolkit + thunks/listeners | Logic trapped in class components; hard to test | Large |
 | P2.4 | Convert critical paths to TypeScript | Zero types today | Large (incremental OK) |

@@ -60,6 +60,27 @@ class Array2DTracer extends Tracer {
   deselectCol(y, sx, ex) {
     this.deselect(sx, y, ex, y);
   }
+
+  captureState() {
+    return {
+      ...super.captureState(),
+      data: (this.data || []).map(row => row.map(el => ({
+        value: el.value,
+        patched: el.patched,
+        selected: el.selected,
+      }))),
+    };
+  }
+
+  restoreState(state) {
+    super.restoreState(state);
+    this.data = (state.data || []).map(row => row.map((el) => {
+      const element = new Element(el.value);
+      element.patched = !!el.patched;
+      element.selected = !!el.selected;
+      return element;
+    }));
+  }
 }
 
 export default Array2DTracer;

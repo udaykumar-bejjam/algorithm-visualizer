@@ -23,6 +23,18 @@ class LogTracer extends Tracer {
   printf(format, ...args) {
     this.print(sprintf(format, ...args));
   }
+
+  captureState() {
+    return {
+      ...super.captureState(),
+      log: this.log || '',
+    };
+  }
+
+  restoreState(state) {
+    super.restoreState(state);
+    this.log = state.log || '';
+  }
 }
 
 export default LogTracer;
