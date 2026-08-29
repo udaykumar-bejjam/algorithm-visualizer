@@ -2,6 +2,7 @@ import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import Array2DRenderer from '../Array2DRenderer';
 import { getThemeColors } from 'common/theme';
+import { getChartAnimationOptions } from 'common/motion';
 import { ensureChartJsSetup } from '../chartSetup';
 import styles from './ScatterRenderer.module.scss';
 
@@ -39,7 +40,7 @@ class ScatterRenderer extends Array2DRenderer {
           options={{
             responsive: true,
             maintainAspectRatio: false,
-            animation: false,
+            animation: getChartAnimationOptions(),
             layout: {
               padding: {
                 left: 20,

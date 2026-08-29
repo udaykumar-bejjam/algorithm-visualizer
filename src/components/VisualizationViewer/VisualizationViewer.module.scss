@@ -14,14 +14,20 @@
   flex-direction: column;
   align-items: stretch;
   min-height: 0;
-  animation: viz-fade 180ms ease-out;
 }
 
-@keyframes viz-fade {
+.pulse {
+  animation: chunk-ease var(--motion-duration) var(--motion-easing);
+}
+
+@keyframes chunk-ease {
   from {
-    opacity: .55;
+    opacity: 0.72;
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }

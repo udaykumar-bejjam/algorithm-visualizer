@@ -18,6 +18,8 @@
   --button-inset-shadow: #1a1a1a;
   --chart-grid: rgba(255, 255, 255, 0.08);
   --focus-ring: #7eb6ff;
+  --motion-duration: 280ms;
+  --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
 }
 
@@ -39,7 +41,19 @@
   --button-inset-shadow: rgba(15, 23, 42, 0.18);
   --chart-grid: rgba(15, 23, 42, 0.08);
   --focus-ring: #2563eb;
+  --motion-duration: 280ms;
+  --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: light;
+}
+
+[data-motion='off'] {
+  --motion-duration: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration: 0ms;
+  }
 }
 
 $theme-dark: var(--theme-dark);

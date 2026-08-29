@@ -2,6 +2,7 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import Array1DRenderer from '../Array1DRenderer';
 import { getThemeColors } from 'common/theme';
+import { getChartAnimationOptions } from 'common/motion';
 import { ensureChartJsSetup } from '../chartSetup';
 import styles from './ChartRenderer.module.scss';
 
@@ -34,7 +35,7 @@ class ChartRenderer extends Array1DRenderer {
           options={{
             responsive: true,
             maintainAspectRatio: false,
-            animation: false,
+            animation: getChartAnimationOptions(),
             plugins: {
               legend: { display: false },
               tooltip: { enabled: true },

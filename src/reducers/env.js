@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { combineActions, createAction, handleActions } from 'redux-actions';
 import { applyDocumentTheme, normalizeTheme, THEME_DARK } from 'common/theme';
+import { applyDocumentMotion, normalizeMotionEnabled } from 'common/motion';
 
 const prefix = 'ENV';
 
@@ -23,6 +24,12 @@ const setTheme = createAction(`${prefix}/SET_THEME`, theme => {
   applyDocumentTheme(next);
   return { theme: next };
 });
+const setMotionEnabled = createAction(`${prefix}/SET_MOTION_ENABLED`, motionEnabled => {
+  const next = normalizeMotionEnabled(motionEnabled);
+  Cookies.set('motionEnabled', next ? '1' : '0');
+  applyDocumentMotion(next);
+  return { motionEnabled: next };
+});
 
 export const actions = {
   setExt,
@@ -30,10 +37,14 @@ export const actions = {
   setAutoBuild,
   setSoundEnabled,
   setTheme,
+  setMotionEnabled,
 };
 
 const initialTheme = normalizeTheme(Cookies.get('theme') || THEME_DARK);
 applyDocumentTheme(initialTheme);
+
+const initialMotion = Cookies.get('motionEnabled') !== '0';
+applyDocumentMotion(initialMotion);
 
 const defaultState = {
   ext: Cookies.get('ext') || 'js',
@@ -41,6 +52,7 @@ const defaultState = {
   autoBuild: Cookies.get('autoBuild') !== '0',
   soundEnabled: Cookies.get('soundEnabled') === '1',
   theme: initialTheme,
+  motionEnabled: initialMotion,
 };
 
 export default handleActions({
@@ -50,6 +62,7 @@ export default handleActions({
     setAutoBuild,
     setSoundEnabled,
     setTheme,
+    setMotionEnabled,
   )]: (state, { payload }) => ({
     ...state,
     ...payload,

@@ -50,6 +50,7 @@ Complete inventory of the repository for navigation and ownership.
 | `config.js` | Languages (js/cpp/java), Ace modes, skeletons |
 | `util.js` | `classes`, `distance`, `extension`, gist refine, file factories, `isSaved` |
 | `theme.js` | Dark/light palettes, `applyDocumentTheme`, Chart/Ace helpers |
+| `motion.js` | Motion preference helpers + Chart.js animation options |
 | `exportMedia.js` | Capture viewer frames; encode/download GIF & WebM |
 | `stylesheet/colors.scss` | Theme CSS variables (+ SCSS aliases) |
 | `stylesheet/fonts.scss` | Font stacks |

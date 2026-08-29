@@ -9,6 +9,10 @@
       fill: $theme-light;
       stroke: $color-font;
       stroke-width: 1;
+      transition:
+        fill var(--motion-duration) var(--motion-easing),
+        stroke var(--motion-duration) var(--motion-easing),
+        stroke-width var(--motion-duration) var(--motion-easing);
     }
 
     .id {
@@ -28,6 +32,7 @@
       .circle {
         fill: $color-selected;
         stroke: $color-selected;
+        stroke-width: 2;
       }
     }
 
@@ -43,6 +48,9 @@
     .line {
       stroke: $color-font;
       stroke-width: 2;
+      transition:
+        stroke var(--motion-duration) var(--motion-easing),
+        stroke-width var(--motion-duration) var(--motion-easing);
 
       &.directed {
         marker-end: url(#markerArrow);

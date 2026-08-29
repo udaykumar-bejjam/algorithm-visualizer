@@ -11,6 +11,7 @@
 | Toasts | Success/error; auto-hide ~3s | `ToastContainer`, `BaseComponent` |
 | Fullscreen | `screenfull` toggle | `Header` |
 | Theme | Dark / light via Settings; cookie `theme` | `env.setTheme`, CSS `--*` tokens |
+| Motion | Ease between playback chunks; Settings toggle | `env.setMotionEnabled`, `common/motion` |
 
 ## Algorithm browsing
 
