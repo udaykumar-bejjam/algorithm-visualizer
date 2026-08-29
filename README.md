@@ -9,6 +9,10 @@ Learning an algorithm gets much easier with visualizing it. Don't get what we me
 
 [**algorithm-visualizer.org**![Screenshot](https://raw.githubusercontent.com/algorithm-visualizer/algorithm-visualizer/master/branding/screenshot.png)](https://algorithm-visualizer.org/)
 
+## Documentation
+
+Internal architecture notes, feature catalog, visualization engine reference, and enhancement roadmap live in [`docs/`](docs/README.md).
+
 ## Contributing
 
 We have multiple repositories under the hood that comprise the website. Take a look at the contributing guidelines in the repository you want to contribute to.

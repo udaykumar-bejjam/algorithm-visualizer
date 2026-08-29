@@ -47,6 +47,7 @@ You can also run `algorithm-visualizer` in Gitpod, a free online dev environment
 ## Directory Structure
 
 - [**branding/**](branding) contains representative image files.
+- [**docs/**](docs) contains internal documentation (architecture, features, visualization engine, roadmap).
 - [**public/**](public) contains static files to be served.
 - [**src/**](src) contains source code. 
     - [**apis/**](src/apis) defines outgoing API requests.
@@ -58,3 +59,5 @@ You can also run `algorithm-visualizer` in Gitpod, a free online dev environment
         - [**tracers/**](src/core/tracers) interprets visualizing commands into visualization data.
     - [**files/**](src/files) contains markdown or skeleton files to be shown in the code editor.
     - [**reducers/**](src/reducers) contains Redux reducers.
+
+For deeper orientation, start with [docs/README.md](docs/README.md) and [docs/08-developer-guide.md](docs/08-developer-guide.md).
