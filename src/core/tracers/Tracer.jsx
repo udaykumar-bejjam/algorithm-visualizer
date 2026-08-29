@@ -14,6 +14,10 @@ class Tracer {
     return Renderer;
   }
 
+  getTypeName() {
+    return this.constructor.name;
+  }
+
   init() {
   }
 
@@ -29,6 +33,18 @@ class Tracer {
 
   reset() {
     this.set();
+  }
+
+  captureState() {
+    return {
+      type: this.getTypeName(),
+      key: this.key,
+      title: this.title,
+    };
+  }
+
+  restoreState(state) {
+    this.title = state.title;
   }
 }
 

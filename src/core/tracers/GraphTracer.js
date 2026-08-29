@@ -264,6 +264,47 @@ class GraphTracer extends Tracer {
   log(key) {
     this.logTracer = key ? this.getObject(key) : null;
   }
+
+  getLayoutMethodName() {
+    const { method } = this.callLayout || {};
+    if (method === this.layoutTree) return 'layoutTree';
+    if (method === this.layoutRandom) return 'layoutRandom';
+    if (method === this.layoutLinkedList) return 'layoutLinkedList';
+    return 'layoutCircle';
+  }
+
+  captureState() {
+    return {
+      ...super.captureState(),
+      dimensions: { ...this.dimensions },
+      isDirected: this.isDirected,
+      isWeighted: this.isWeighted,
+      randomSeed: this.randomSeed,
+      logTracerKey: this.logTracer ? this.logTracer.key : null,
+      layoutMethod: this.getLayoutMethodName(),
+      layoutArgs: this.callLayout && this.callLayout.args
+        ? Array.from(this.callLayout.args)
+        : [],
+      nodes: (this.nodes || []).map(node => ({ ...node })),
+      edges: (this.edges || []).map(edge => ({ ...edge })),
+    };
+  }
+
+  restoreState(state) {
+    super.restoreState(state);
+    this.dimensions = { ...state.dimensions };
+    this.isDirected = state.isDirected;
+    this.isWeighted = state.isWeighted;
+    this.randomSeed = state.randomSeed;
+    this.logTracer = state.logTracerKey ? this.getObject(state.logTracerKey) : null;
+    const layoutMethod = this[state.layoutMethod] || this.layoutCircle;
+    this.callLayout = {
+      method: layoutMethod,
+      args: state.layoutArgs || [],
+    };
+    this.nodes = (state.nodes || []).map(node => ({ ...node }));
+    this.edges = (state.edges || []).map(edge => ({ ...edge }));
+  }
 }
 
 export default GraphTracer;

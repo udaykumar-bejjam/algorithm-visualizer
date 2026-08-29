@@ -122,9 +122,10 @@ Thin subclasses swapping renderers. Scatter expects cell values `[x, y]`.
 File: `components/VisualizationViewer/index.js`.
 
 - Maintains `objects` map and `root` (not React state).
-- Cursor **forward**: apply only new chunks.
-- Cursor **backward**: `reset()` then replay `[0, cursor)`.
-- Side effect: `layoutRandom` is non-deterministic on rewind.
+- Cursor **forward**: apply new chunks and **cache an immutable snapshot** per cursor (`core/frames.js`).
+- Cursor **backward** / jump: restore from snapshot when available; otherwise replay from the start while filling the cache.
+- Snapshots deep-copy tracer/layout state (`captureState` / `restoreState`), so scrubbing does not mutate prior frames.
+- Seeded `layoutRandom` + snapshots keep rewind deterministic.
 - Errors in `applyCommand` → toast via `BaseComponent`.
 
 ## Player chunking

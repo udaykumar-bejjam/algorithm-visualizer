@@ -41,6 +41,19 @@ class Array1DTracer extends Array2DTracer {
   syncChartTracer() {
     if (this.chartTracer) this.chartTracer.data = this.data;
   }
+
+  captureState() {
+    return {
+      ...super.captureState(),
+      chartTracerKey: this.chartTracer ? this.chartTracer.key : null,
+    };
+  }
+
+  restoreState(state) {
+    super.restoreState(state);
+    this.chartTracer = state.chartTracerKey ? this.getObject(state.chartTracerKey) : null;
+    this.syncChartTracer();
+  }
 }
 
 export default Array1DTracer;
