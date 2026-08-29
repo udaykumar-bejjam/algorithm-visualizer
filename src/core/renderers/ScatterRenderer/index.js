@@ -1,34 +1,34 @@
-import React from 'react'
-import { Scatter } from 'react-chartjs-2'
-import Array2DRenderer from '../Array2DRenderer'
-import styles from './ScatterRenderer.module.scss'
+import React from 'react';
+import { Scatter } from 'react-chartjs-2';
+import Array2DRenderer from '../Array2DRenderer';
+import { colorPatched, colorSelected, seriesColors } from 'common/theme';
 
 const convertToObjectArray = (value) => {
   if (Array.isArray(value)) {
-    const [x, y] = value
-    return { x, y }
+    const [x, y] = value;
+    return { x, y };
   }
-  return { x: 0, y: value }
-}
+  return { x: 0, y: value };
+};
 
 class ScatterRenderer extends Array2DRenderer {
   renderData() {
-    const { data } = this.props.data
+    const { data } = this.props.data;
 
     const datasets = data.map((series, index) => ({
       backgroundColor: series.map(point => (
-        point.patched ? styles.colorPatched :
-          point.selected ? styles.colorSelected :
-            styles.seriesColors.split(',')[index % 6]
+        point.patched ? colorPatched :
+          point.selected ? colorSelected :
+            seriesColors[index % seriesColors.length]
       )),
       data: series.map(s => convertToObjectArray(s.value)),
       label: `Series ${index + 1}`,
       pointRadius: series.map(point => (point.selected || point.patched ? 6 : (index + 1) * 2)),
-    }))
+    }));
 
     const chartData = {
       datasets,
-    }
+    };
 
     return (
       <Scatter
@@ -58,8 +58,8 @@ class ScatterRenderer extends Array2DRenderer {
           },
         }}
       />
-    )
+    );
   }
 }
 
-export default ScatterRenderer
+export default ScatterRenderer;

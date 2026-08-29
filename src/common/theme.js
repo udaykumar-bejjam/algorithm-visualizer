@@ -1,0 +1,12 @@
+export const themeDark = '#242424';
+export const themeNormal = '#393939';
+export const themeLight = '#505050';
+export const colorFont = '#bbbbbb';
+export const colorShadow = 'rgba(0,0,0,.2)';
+export const colorOverlay = 'rgba(255,255,255,.1)';
+export const colorAlert = '#f3bd58';
+export const colorSelected = '#2962ff';
+export const colorPatched = '#c51162';
+export const colorHighlight = '#29d';
+export const colorActive = '#00e676';
+export const seriesColors = ['#ffffff', '#00e676', '#2962ff', '#f44336', '#ffeb3b', '#00bcd4'];

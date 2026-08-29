@@ -20,7 +20,7 @@ Prioritized improvements based on a full codebase review. Difficulty is expresse
 | ID | Enhancement | Why | Scope |
 |----|-------------|-----|-------|
 | P1.1 | Replace `node-sass` with `sass` (Dart Sass) | `node-sass` blocked on modern Node | Medium — build toolchain |
-| P1.2 | Upgrade CRA → Vite (or CRA 5 / Next) + React 18 | CRA 3 / React 16 EOL; unlock concurrent features | Large — build + lifecycle APIs |
+| P1.2 | Upgrade CRA → Vite (or CRA 5 / Next) + React 18 | CRA 3 / React 16 EOL; unlock concurrent features | **Done** — Vite 5 + React 18 |
 | P1.3 | Replace deprecated `componentWillReceiveProps` | Soft warnings → hard removal in future React | Medium — App, Player, Viewer, Navigator, Toast |
 | P1.4 | Upgrade axios to 1.x; pin `bluebird`/`brace` (drop `latest`) | Security & reproducible installs | Small–medium |
 | P1.5 | Remove or replace `react-router-redux` | Incompatible with RR v5 usage | Small |

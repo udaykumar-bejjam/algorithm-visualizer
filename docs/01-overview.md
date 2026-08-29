@@ -33,19 +33,20 @@ This repository is **only the web client**. Compiling/running code, OAuth, and a
 
 | Layer | Choice |
 |-------|--------|
-| UI | React 16.8 (class components), react-helmet |
+| UI | React 18 (class components + createRoot) |
 | State | Redux 4 + redux-actions |
-| Routing | react-router / react-router-dom v5 (+ unused react-router-redux) |
-| Build | Create React App 3 (`react-scripts`) |
+| Routing | react-router / react-router-dom v5 |
+| Build | Vite 5 |
 | Styles | SCSS modules + shared tokens in `src/common/stylesheet` |
 | Editor | react-ace / brace (Tomorrow Night Eighties theme) |
 | Charts | chart.js 2 + react-chartjs-2 |
-| HTTP | axios 0.19 (response interceptor unwraps `.data`) |
+| HTTP | axios 0.27 (response interceptor unwraps `.data`) |
 | Icons | Font Awesome (legacy free packages + svg-core) |
 | Auth storage | js-cookie (`access_token`, `ext`) |
 | Languages | JavaScript, C++, Java |
+| Tests | Vitest |
 
-**Node engine:** `>=10.15.3` (historical; modern Node may need toolchain updates, especially for `node-sass`).
+**Node engine:** `>=18`
 
 ## Design language
 
