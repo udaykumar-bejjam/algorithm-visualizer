@@ -30,6 +30,11 @@ class Renderer extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
   togglePan(enable = !this.handleMouseDown) {
     this.handleMouseDown = enable ? this._handleMouseDown : undefined;
   }

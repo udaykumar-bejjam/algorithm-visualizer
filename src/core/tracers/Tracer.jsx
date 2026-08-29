@@ -1,5 +1,5 @@
 import React from 'react';
-import { Renderer } from 'core/renderers';
+import Renderer from '../renderers/Renderer';
 
 class Tracer {
   constructor(key, getObject, title) {

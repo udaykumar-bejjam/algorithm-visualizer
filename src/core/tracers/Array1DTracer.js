@@ -1,5 +1,5 @@
-import { Array2DTracer } from 'core/tracers';
-import { Array1DRenderer } from 'core/renderers';
+import Array2DTracer from './Array2DTracer';
+import { Array1DRenderer } from '../renderers';
 
 class Array1DTracer extends Array2DTracer {
   getRendererClass() {

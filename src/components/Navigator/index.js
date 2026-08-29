@@ -28,9 +28,10 @@ class Navigator extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { algorithm } = nextProps.current;
-    if (algorithm) {
+  componentDidUpdate(prevProps) {
+    const { algorithm } = this.props.current;
+    const prevAlgorithm = prevProps.current.algorithm;
+    if (algorithm && (!prevAlgorithm || algorithm.categoryKey !== prevAlgorithm.categoryKey)) {
       this.toggleCategory(algorithm.categoryKey, true);
     }
   }
@@ -52,15 +53,15 @@ class Navigator extends React.Component {
     const categoriesOpened = {};
     const query = e.target.value;
     categories.forEach(category => {
-      if (this.testQuery(category.name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
+      if (this.testQuery(category.name, query) ||
+        category.algorithms.find(algorithm => this.testQuery(algorithm.name, query))) {
         categoriesOpened[category.key] = true;
       }
     });
     this.setState({ categoriesOpened, query });
   }
 
-  testQuery(value) {
-    const { query } = this.state;
+  testQuery(value, query = this.state.query) {
     const refine = string => string.replace(/-/g, ' ').replace(/[^\w ]/g, '');
     const refinedQuery = refine(query);
     const refinedValue = refine(value);
@@ -122,7 +123,7 @@ class Navigator extends React.Component {
             }
           </ExpandableListItem>
           <ListItem icon={faBook} label="API Reference"
-                    href="https://github.com/algorithm-visualizer/algorithm-visualizer/wiki"/>
+                    onClick={() => this.props.onOpenApiReference && this.props.onOpenApiReference()}/>
           <ListItem icon={faGithub} label="Fork me on GitHub"
                     href="https://github.com/algorithm-visualizer/algorithm-visualizer"/>
         </div>

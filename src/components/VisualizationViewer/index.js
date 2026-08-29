@@ -24,9 +24,9 @@ class VisualizationViewer extends BaseComponent {
     this.update(chunks, cursor);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { chunks, cursor } = nextProps.player;
-    const { chunks: oldChunks, cursor: oldCursor } = this.props.player;
+  componentDidUpdate(prevProps) {
+    const { chunks, cursor } = this.props.player;
+    const { chunks: oldChunks, cursor: oldCursor } = prevProps.player;
     if (chunks !== oldChunks || cursor !== oldCursor) {
       this.update(chunks, cursor, oldChunks, oldCursor);
     }
@@ -48,6 +48,7 @@ class VisualizationViewer extends BaseComponent {
     } else {
       this.props.setLineIndicator(undefined);
     }
+    this.forceUpdate();
   }
 
   applyCommand(command) {
@@ -81,12 +82,15 @@ class VisualizationViewer extends BaseComponent {
 
   render() {
     const { className } = this.props;
+    const { cursor } = this.props.player;
 
     return (
       <div className={classes(styles.visualization_viewer, className)}>
-        {
-          this.root && this.root.render()
-        }
+        <div className={styles.fade} key={cursor}>
+          {
+            this.root && this.root.render()
+          }
+        </div>
       </div>
     );
   }

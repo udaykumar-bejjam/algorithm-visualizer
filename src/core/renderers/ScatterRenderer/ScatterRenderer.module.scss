@@ -1,1 +1,8 @@
 @import "~common/stylesheet/index";
+
+:export {
+  colorFont: $color-font;
+  colorSelected: $color-selected;
+  colorPatched: $color-patched;
+  seriesColors: #ffffff,#00e676,#2962ff,#f44336,#ffeb3b,#00bcd4;
+}

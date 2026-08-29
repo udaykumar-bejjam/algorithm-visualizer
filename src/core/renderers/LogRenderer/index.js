@@ -1,6 +1,6 @@
-import React from 'react';
-import { Renderer } from 'core/renderers';
+import Renderer from '../Renderer';
 import styles from './LogRenderer.module.scss';
+import React from 'react';
 
 class LogRenderer extends Renderer {
   constructor(props) {
@@ -12,7 +12,9 @@ class LogRenderer extends Renderer {
   componentDidUpdate(prevProps, prevState, snapshot) {
     super.componentDidUpdate(prevProps, prevState, snapshot);
     const div = this.elementRef.current;
-    div.scrollTop = div.scrollHeight;
+    if (div) {
+      div.scrollTop = div.scrollHeight;
+    }
   }
 
   renderData() {
@@ -20,11 +22,10 @@ class LogRenderer extends Renderer {
 
     return (
       <div className={styles.log} ref={this.elementRef}>
-        <div className={styles.content} dangerouslySetInnerHTML={{ __html: log }} />
+        <div className={styles.content}>{log}</div>
       </div>
     );
   }
 }
 
 export default LogRenderer;
-

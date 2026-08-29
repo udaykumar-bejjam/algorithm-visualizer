@@ -1,6 +1,6 @@
-import { Tracer } from 'core/tracers';
-import { distance } from 'common/util';
-import { GraphRenderer } from 'core/renderers';
+import Tracer from './Tracer';
+import { distance, createSeededRandom } from 'common/util';
+import { GraphRenderer } from '../renderers';
 
 class GraphTracer extends Tracer {
   getRendererClass() {
@@ -22,6 +22,7 @@ class GraphTracer extends Tracer {
     this.isWeighted = false;
     this.callLayout = { method: this.layoutCircle, args: [] };
     this.logTracer = null;
+    this.randomSeed = null;
   }
 
   set(array2d = []) {
@@ -56,6 +57,7 @@ class GraphTracer extends Tracer {
 
   updateNode(id, weight, x, y, visitedCount, selectedCount) {
     const node = this.findNode(id);
+    if (!node) return;
     const update = { weight, x, y, visitedCount, selectedCount };
     Object.keys(update).forEach(key => {
       if (update[key] === undefined) delete update[key];
@@ -68,6 +70,7 @@ class GraphTracer extends Tracer {
     if (!node) return;
     const index = this.nodes.indexOf(node);
     this.nodes.splice(index, 1);
+    this.edges = this.edges.filter(edge => edge.source !== id && edge.target !== id);
     this.layout();
   }
 
@@ -79,6 +82,7 @@ class GraphTracer extends Tracer {
 
   updateEdge(source, target, weight, visitedCount, selectedCount) {
     const edge = this.findEdge(source, target);
+    if (!edge) return;
     const update = { weight, visitedCount, selectedCount };
     Object.keys(update).forEach(key => {
       if (update[key] === undefined) delete update[key];
@@ -203,14 +207,16 @@ class GraphTracer extends Tracer {
     recursivePosition(rootNode, 0, 0);
   }
 
-  layoutRandom() {
-    this.callLayout = { method: this.layoutRandom, args: arguments };
+  layoutRandom(seed = this.randomSeed == null ? Date.now() : this.randomSeed) {
+    this.randomSeed = seed;
+    this.callLayout = { method: this.layoutRandom, args: [seed] };
+    const random = createSeededRandom(seed);
     const rect = this.getRect();
     const placedNodes = [];
     for (const node of this.nodes) {
       do {
-        node.x = rect.left + Math.random() * rect.width;
-        node.y = rect.top + Math.random() * rect.height;
+        node.x = rect.left + random() * rect.width;
+        node.y = rect.top + random() * rect.height;
       } while (placedNodes.find(placedNode => distance(node, placedNode) < 48));
       placedNodes.push(node);
     }
@@ -228,6 +234,7 @@ class GraphTracer extends Tracer {
     const edge = this.findEdge(source, target);
     if (edge) edge.visitedCount += visit ? 1 : -1;
     const node = this.findNode(target);
+    if (!node) return;
     if (weight !== undefined) node.weight = weight;
     node.visitedCount += visit ? 1 : -1;
     if (this.logTracer) {
@@ -247,6 +254,7 @@ class GraphTracer extends Tracer {
     const edge = this.findEdge(source, target);
     if (edge) edge.selectedCount += select ? 1 : -1;
     const node = this.findNode(target);
+    if (!node) return;
     node.selectedCount += select ? 1 : -1;
     if (this.logTracer) {
       this.logTracer.println(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);

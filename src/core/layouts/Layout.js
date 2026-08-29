@@ -1,6 +1,5 @@
 import React from 'react';
 import { ResizableContainer } from 'components';
-import { HorizontalLayout } from 'core/layouts';
 
 class Layout {
   constructor(key, getObject, children) {
@@ -39,7 +38,7 @@ class Layout {
   }
 
   render() {
-    const horizontal = this instanceof HorizontalLayout;
+    const horizontal = this.constructor.isHorizontal;
 
     return (
       <ResizableContainer key={this.key} ref={this.ref} weights={this.weights} horizontal={horizontal}
@@ -51,5 +50,7 @@ class Layout {
     );
   }
 }
+
+Layout.isHorizontal = false;
 
 export default Layout;

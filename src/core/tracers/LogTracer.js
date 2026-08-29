@@ -1,6 +1,6 @@
 import { sprintf } from 'sprintf-js';
-import { Tracer } from 'core/tracers';
-import { LogRenderer } from 'core/renderers';
+import Tracer from './Tracer';
+import { LogRenderer } from '../renderers';
 
 class LogTracer extends Tracer {
   getRendererClass() {

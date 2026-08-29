@@ -1,0 +1,73 @@
+@import "~common/stylesheet/index";
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .55);
+  padding: 24px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 100%);
+  max-height: min(80vh, 900px);
+  background: $theme-normal;
+  border: 1px solid $theme-light;
+  box-shadow: 0 12px 40px $color-shadow;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid $theme-light;
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-large;
+  font-weight: 700;
+}
+
+.body {
+  overflow: auto;
+  padding: 16px 20px 24px;
+}
+
+.content {
+  line-height: 1.6;
+
+  h1, h2, h3 {
+    margin-top: 1.2em;
+  }
+
+  code {
+    font-family: $font-family-monospace;
+    background: $theme-dark;
+    padding: 0 4px;
+  }
+
+  pre {
+    background: $theme-dark;
+    padding: 12px;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      border: 1px solid $theme-light;
+      padding: 6px 8px;
+      text-align: left;
+    }
+  }
+}

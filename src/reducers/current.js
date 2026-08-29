@@ -114,11 +114,12 @@ export default handleActions({
   )]: (state, { payload }) => {
     const { file, ...update } = payload;
     const editingFile = { ...file, ...update };
+    const fileExt = extension(editingFile.name);
     const newState = {
       ...state,
       files: state.files.map(oldFile => oldFile === file ? editingFile : oldFile),
       editingFile,
-      shouldBuild: extension(editingFile.name) === 'md',
+      shouldBuild: ['md', 'js', 'cpp', 'java', 'json'].includes(fileExt),
     };
     return {
       ...newState,

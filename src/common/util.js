@@ -8,6 +8,16 @@ const distance = (a, b) => {
 
 const extension = fileName => /(?:\.([^.]+))?$/.exec(fileName)[1];
 
+const createSeededRandom = (seed) => {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 const refineGist = gist => {
   const gistId = gist.id;
   const title = gist.description;
@@ -38,13 +48,57 @@ const isSaved = ({ titles, files, lastTitles, lastFiles }) => {
   return serialize(titles, files) === serialize(lastTitles, lastFiles);
 };
 
+const chunkCommands = (commands = []) => {
+  const chunks = [{
+    commands: [],
+    lineNumber: undefined,
+  }];
+  const queue = commands.slice();
+  while (queue.length) {
+    const command = queue.shift();
+    const { key, method, args } = command;
+    if (key === null && method === 'delay') {
+      const [lineNumber] = args;
+      chunks[chunks.length - 1].lineNumber = lineNumber;
+      chunks.push({
+        commands: [],
+        lineNumber: undefined,
+      });
+    } else {
+      chunks[chunks.length - 1].commands.push(command);
+    }
+  }
+  return chunks;
+};
+
+const validateCommands = (commands) => {
+  if (!Array.isArray(commands)) {
+    throw new Error('Visualization commands must be an array');
+  }
+  commands.forEach((command, index) => {
+    if (!command || typeof command !== 'object') {
+      throw new Error(`Invalid command at index ${index}`);
+    }
+    if (!('method' in command) || typeof command.method !== 'string') {
+      throw new Error(`Command at index ${index} is missing a method`);
+    }
+    if (!('args' in command) || !Array.isArray(command.args)) {
+      throw new Error(`Command at index ${index} is missing args`);
+    }
+  });
+  return commands;
+};
+
 export {
   classes,
   distance,
   extension,
+  createSeededRandom,
   refineGist,
   createFile,
   createProjectFile,
   createUserFile,
   isSaved,
+  chunkCommands,
+  validateCommands,
 };

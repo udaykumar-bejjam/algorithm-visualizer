@@ -78,12 +78,11 @@ class Button extends React.Component {
     return to ? (
       <Link {...props} />
     ) : href ? (
-      <a rel="noopener" target="_blank" {...props} />
+      <a rel="noopener noreferrer" target="_blank" {...props}>{props.children}</a>
     ) : (
-      <div {...props} />
+      <button type="button" disabled={disabled} {...props} />
     );
   }
 }
 
 export default Button;
-

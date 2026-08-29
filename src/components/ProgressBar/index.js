@@ -9,6 +9,7 @@ class ProgressBar extends React.Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleDoubleClick = this.handleDoubleClick.bind(this);
   }
 
   handleMouseDown(e) {
@@ -31,12 +32,40 @@ class ProgressBar extends React.Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
 
+  handleDoubleClick(e) {
+    const { left } = e.currentTarget.getBoundingClientRect();
+    const { offsetWidth } = e.currentTarget;
+    const { onToggleBreakpoint } = this.props;
+    const progress = (e.clientX - left) / offsetWidth;
+    if (onToggleBreakpoint) onToggleBreakpoint(progress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
   render() {
-    const { className, total, current } = this.props;
+    const { className, total, current, breakpoints = [] } = this.props;
+    const percent = total > 0 ? (current / total) * 100 : 0;
 
     return (
-      <div className={classes(styles.progress_bar, className)} onMouseDown={this.handleMouseDown}>
-        <div className={styles.active} style={{ width: `${current / total * 100}%` }} />
+      <div
+        className={classes(styles.progress_bar, className)}
+        onMouseDown={this.handleMouseDown}
+        onDoubleClick={this.handleDoubleClick}
+        title="Drag to scrub. Double-click to toggle a breakpoint."
+      >
+        <div className={styles.active} style={{ width: `${percent}%` }} />
+        {
+          breakpoints.map(cursor => (
+            <div
+              key={cursor}
+              className={styles.breakpoint}
+              style={{ left: `${total > 0 ? (cursor / total) * 100 : 0}%` }}
+            />
+          ))
+        }
         <div className={styles.label}>
           <span className={styles.current}>{current}</span> / {total}
         </div>

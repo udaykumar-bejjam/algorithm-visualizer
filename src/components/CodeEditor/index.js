@@ -55,10 +55,12 @@ class CodeEditor extends React.Component {
             _key: lineIndicator.cursor,
           }] : []}
           value={editingFile.content}/>
-        <div className={classes(styles.contributors_viewer, className)}>
+        <div className={styles.contributors_viewer}>
           <span className={classes(styles.contributor, styles.label)}>Contributed by</span>
           {
-            (editingFile.contributors || [user || { login: 'guest', avatar_url: faUser }]).map(contributor => (
+            (editingFile.contributors && editingFile.contributors.length
+              ? editingFile.contributors
+              : [user || { login: 'guest', avatar_url: faUser }]).map(contributor => (
               <Button className={styles.contributor} icon={contributor.avatar_url} key={contributor.login}
                       href={`https://github.com/${contributor.login}`}>
                 {contributor.login}

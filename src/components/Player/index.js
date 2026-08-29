@@ -7,11 +7,15 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension } from 'common/util';
+import faDownload from '@fortawesome/fontawesome-free-solid/faDownload';
+import { classes, extension, chunkCommands, validateCommands } from 'common/util';
 import { TracerApi } from 'apis';
 import { actions } from 'reducers';
 import { BaseComponent, Button, ProgressBar } from 'components';
 import styles from './Player.module.scss';
+
+const BUILDABLE_EXTS = ['md', 'js', 'cpp', 'java', 'json'];
+const AUTO_BUILD_DELAY_MS = 800;
 
 class Player extends BaseComponent {
   constructor(props) {
@@ -24,6 +28,8 @@ class Player extends BaseComponent {
     };
 
     this.tracerApiSource = null;
+    this.buildTimer = null;
+    this.audioContext = null;
 
     this.reset();
   }
@@ -33,32 +39,60 @@ class Player extends BaseComponent {
     if (shouldBuild) this.build(editingFile);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { editingFile, shouldBuild } = nextProps.current;
-    if (editingFile !== this.props.current.editingFile) {
-      if (shouldBuild) this.build(editingFile);
+  componentWillUnmount() {
+    this.pause();
+    this.clearBuildTimer();
+    if (this.tracerApiSource) {
+      this.tracerApiSource.cancel();
+      this.tracerApiSource = null;
+    }
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null;
     }
   }
 
-  reset(commands = []) {
-    const chunks = [{
-      commands: [],
-      lineNumber: undefined,
-    }];
-    while (commands.length) {
-      const command = commands.shift();
-      const { key, method, args } = command;
-      if (key === null && method === 'delay') {
-        const [lineNumber] = args;
-        chunks[chunks.length - 1].lineNumber = lineNumber;
-        chunks.push({
-          commands: [],
-          lineNumber: undefined,
-        });
-      } else {
-        chunks[chunks.length - 1].commands.push(command);
-      }
+  componentDidUpdate(prevProps) {
+    const { editingFile, shouldBuild } = this.props.current;
+    const { autoBuild } = this.props.env;
+    const prevFile = prevProps.current.editingFile;
+
+    if (editingFile !== prevFile) {
+      this.clearBuildTimer();
+      if (shouldBuild) this.build(editingFile);
+      return;
     }
+
+    if (
+      autoBuild &&
+      shouldBuild &&
+      editingFile &&
+      prevFile &&
+      editingFile.content !== prevFile.content &&
+      BUILDABLE_EXTS.includes(extension(editingFile.name))
+    ) {
+      this.scheduleBuild(editingFile);
+    }
+  }
+
+  clearBuildTimer() {
+    if (this.buildTimer) {
+      window.clearTimeout(this.buildTimer);
+      this.buildTimer = null;
+    }
+  }
+
+  scheduleBuild(file) {
+    this.clearBuildTimer();
+    this.buildTimer = window.setTimeout(() => {
+      this.buildTimer = null;
+      this.build(file);
+    }, AUTO_BUILD_DELAY_MS);
+  }
+
+  reset(commands = []) {
+    const chunks = chunkCommands(commands);
+    this.props.setCommands(commands.slice ? commands.slice() : [...commands]);
     this.props.setChunks(chunks);
     this.props.setCursor(0);
     this.pause();
@@ -66,6 +100,7 @@ class Player extends BaseComponent {
   }
 
   build(file) {
+    this.clearBuildTimer();
     this.reset();
     if (!file) return;
 
@@ -79,7 +114,8 @@ class Player extends BaseComponent {
         .then(commands => {
           this.tracerApiSource = null;
           this.setState({ building: false });
-          this.reset(commands);
+          const list = validateCommands(Array.isArray(commands) ? commands : []);
+          this.reset(list);
           this.next();
         })
         .catch(error => {
@@ -99,27 +135,62 @@ class Player extends BaseComponent {
     return 1 <= cursor && cursor <= chunks.length;
   }
 
+  playTick() {
+    if (!this.props.env.soundEnabled || typeof window === 'undefined') return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      if (!this.audioContext) this.audioContext = new AudioContext();
+      const ctx = this.audioContext;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 660;
+      gain.gain.value = 0.03;
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start();
+      oscillator.stop(ctx.currentTime + 0.04);
+    } catch (e) {
+      // ignore audio failures
+    }
+  }
+
   prev() {
     this.pause();
     const cursor = this.props.player.cursor - 1;
     if (!this.isValidCursor(cursor)) return false;
     this.props.setCursor(cursor);
+    this.playTick();
     return true;
   }
 
   resume(wrap = false) {
     this.pause();
-    if (this.next() || (wrap && this.props.setCursor(1))) {
-      const interval = 4000 / Math.pow(Math.E, this.state.speed);
-      this.timer = window.setTimeout(() => this.resume(), interval);
-      this.setState({ playing: true });
+    let advanced = this.next();
+    if (!advanced && wrap && this.isValidCursor(1)) {
+      this.props.setCursor(1);
+      advanced = true;
+      this.playTick();
     }
+    if (!advanced) return;
+
+    const { cursor, breakpoints } = this.props.player;
+    if (breakpoints.includes(cursor)) {
+      return;
+    }
+
+    const interval = 4000 / Math.pow(Math.E, this.state.speed);
+    this.timer = window.setTimeout(() => this.resume(), interval);
+    this.setState({ playing: true });
   }
 
   pause() {
     if (this.timer) {
       window.clearTimeout(this.timer);
       this.timer = undefined;
+    }
+    if (this.state.playing) {
       this.setState({ playing: false });
     }
   }
@@ -129,6 +200,7 @@ class Player extends BaseComponent {
     const cursor = this.props.player.cursor + 1;
     if (!this.isValidCursor(cursor)) return false;
     this.props.setCursor(cursor);
+    this.playTick();
     return true;
   }
 
@@ -143,10 +215,33 @@ class Player extends BaseComponent {
     this.props.setCursor(cursor);
   }
 
+  handleToggleBreakpoint(progress) {
+    const { chunks } = this.props.player;
+    if (!chunks.length) return;
+    const cursor = Math.max(1, Math.min(chunks.length, Math.round(progress * chunks.length)));
+    this.props.toggleBreakpoint(cursor);
+  }
+
+  exportCommands() {
+    const { commands } = this.props.player;
+    if (!commands || !commands.length) {
+      this.handleError(new Error('Nothing to export. Build a visualization first.'));
+      return;
+    }
+    const blob = new Blob([JSON.stringify(commands, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'visualization.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+    this.props.showSuccessToast('Exported visualization.json');
+  }
+
   render() {
     const { className } = this.props;
     const { editingFile } = this.props.current;
-    const { chunks, cursor } = this.props.player;
+    const { chunks, cursor, breakpoints } = this.props.player;
     const { speed, playing, building } = this.state;
 
     return (
@@ -164,9 +259,12 @@ class Player extends BaseComponent {
         }
         <Button icon={faChevronLeft} primary disabled={!this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
         <ProgressBar className={styles.progress_bar} current={cursor} total={chunks.length}
-                     onChangeProgress={progress => this.handleChangeProgress(progress)}/>
+                     breakpoints={breakpoints}
+                     onChangeProgress={progress => this.handleChangeProgress(progress)}
+                     onToggleBreakpoint={progress => this.handleToggleBreakpoint(progress)}/>
         <Button icon={faChevronRight} reverse primary disabled={!this.isValidCursor(cursor + 1)}
                 onClick={() => this.next()}/>
+        <Button icon={faDownload} primary onClick={() => this.exportCommands()}>Export</Button>
         <div className={styles.speed}>
           Speed
           <InputRange
@@ -183,6 +281,6 @@ class Player extends BaseComponent {
   }
 }
 
-export default connect(({ current, player }) => ({ current, player }), actions)(
+export default connect(({ current, player, env }) => ({ current, player, env }), actions)(
   Player,
 );
