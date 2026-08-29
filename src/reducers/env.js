@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { combineActions, createAction, handleActions } from 'redux-actions';
+import { applyDocumentTheme, normalizeTheme, THEME_DARK } from 'common/theme';
 
 const prefix = 'ENV';
 
@@ -16,19 +17,30 @@ const setSoundEnabled = createAction(`${prefix}/SET_SOUND_ENABLED`, soundEnabled
   Cookies.set('soundEnabled', soundEnabled ? '1' : '0');
   return { soundEnabled };
 });
+const setTheme = createAction(`${prefix}/SET_THEME`, theme => {
+  const next = normalizeTheme(theme);
+  Cookies.set('theme', next);
+  applyDocumentTheme(next);
+  return { theme: next };
+});
 
 export const actions = {
   setExt,
   setUser,
   setAutoBuild,
   setSoundEnabled,
+  setTheme,
 };
+
+const initialTheme = normalizeTheme(Cookies.get('theme') || THEME_DARK);
+applyDocumentTheme(initialTheme);
 
 const defaultState = {
   ext: Cookies.get('ext') || 'js',
   user: undefined,
   autoBuild: Cookies.get('autoBuild') !== '0',
   soundEnabled: Cookies.get('soundEnabled') === '1',
+  theme: initialTheme,
 };
 
 export default handleActions({
@@ -37,6 +49,7 @@ export default handleActions({
     setUser,
     setAutoBuild,
     setSoundEnabled,
+    setTheme,
   )]: (state, { payload }) => ({
     ...state,
     ...payload,

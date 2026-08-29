@@ -5,6 +5,7 @@ import { classes, extension } from 'common/util';
 import { actions } from 'reducers';
 import { connect } from 'react-redux';
 import { languages } from 'common/config';
+import { getThemeColors } from 'common/theme';
 import { Button, Ellipsis, FoldableAceEditor } from 'components';
 import styles from './CodeEditor.module.scss';
 
@@ -22,7 +23,7 @@ class CodeEditor extends React.Component {
   render() {
     const { className } = this.props;
     const { editingFile } = this.props.current;
-    const { user } = this.props.env;
+    const { user, theme } = this.props.env;
     const { lineIndicator } = this.props.player;
 
     if (!editingFile) return null;
@@ -33,6 +34,7 @@ class CodeEditor extends React.Component {
       fileExt === 'md' ? 'markdown' :
         fileExt === 'json' ? 'json' :
           'plain_text';
+    const aceTheme = getThemeColors(theme).aceTheme;
 
     return (
       <div className={classes(styles.code_editor, className)}>
@@ -40,7 +42,7 @@ class CodeEditor extends React.Component {
           className={styles.ace_editor}
           ref={this.aceEditorRef}
           mode={mode}
-          theme="tomorrow_night_eighties"
+          theme={aceTheme}
           name="code_editor"
           editorProps={{ $blockScrolling: true }}
           onChange={code => this.props.modifyFile(editingFile, code)}

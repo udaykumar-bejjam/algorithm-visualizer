@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import Array1DRenderer from '../Array1DRenderer';
-import { colorFont, colorPatched, colorSelected } from 'common/theme';
+import { getThemeColors } from 'common/theme';
 import { ensureChartJsSetup } from '../chartSetup';
 import styles from './ChartRenderer.module.scss';
 
@@ -13,6 +13,8 @@ class ChartRenderer extends Array1DRenderer {
     if (!row || !row.length) {
       return <div className={styles.chart} />;
     }
+
+    const { colorFont, colorPatched, colorSelected, chartGrid } = getThemeColors();
 
     const chartData = {
       labels: row.map(col => `${col.value}`),
@@ -40,12 +42,12 @@ class ChartRenderer extends Array1DRenderer {
             scales: {
               x: {
                 ticks: { color: colorFont },
-                grid: { color: 'rgba(255,255,255,0.08)' },
+                grid: { color: chartGrid },
               },
               y: {
                 beginAtZero: true,
                 ticks: { color: colorFont },
-                grid: { color: 'rgba(255,255,255,0.08)' },
+                grid: { color: chartGrid },
               },
             },
           }}

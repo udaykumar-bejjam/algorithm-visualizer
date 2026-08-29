@@ -1,7 +1,7 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import Array2DRenderer from '../Array2DRenderer';
-import { colorFont, colorPatched, colorSelected, seriesColors } from 'common/theme';
+import { getThemeColors } from 'common/theme';
 import { ensureChartJsSetup } from '../chartSetup';
 import styles from './ScatterRenderer.module.scss';
 
@@ -18,6 +18,7 @@ const convertToObjectArray = (value) => {
 class ScatterRenderer extends Array2DRenderer {
   renderData() {
     const { data = [] } = this.props.data;
+    const { colorFont, colorPatched, colorSelected, seriesColors, chartGrid } = getThemeColors();
 
     const datasets = data.map((series, index) => ({
       label: `Series ${index + 1}`,
@@ -55,12 +56,12 @@ class ScatterRenderer extends Array2DRenderer {
               x: {
                 type: 'linear',
                 ticks: { color: colorFont },
-                grid: { color: 'rgba(255,255,255,0.08)' },
+                grid: { color: chartGrid },
               },
               y: {
                 type: 'linear',
                 ticks: { color: colorFont },
-                grid: { color: 'rgba(255,255,255,0.08)' },
+                grid: { color: chartGrid },
               },
             },
           }}

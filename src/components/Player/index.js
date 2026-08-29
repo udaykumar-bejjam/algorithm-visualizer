@@ -307,12 +307,14 @@ class Player extends BaseComponent {
             <Button icon={faPlay} primary disabled={busy} onClick={() => this.resume(true)}>Play</Button>
           )
         }
-        <Button icon={faChevronLeft} primary disabled={busy || !this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
+        <Button icon={faChevronLeft} primary disabled={busy || !this.isValidCursor(cursor - 1)}
+                aria-label="Previous step" title="Previous step" onClick={() => this.prev()}/>
         <ProgressBar className={styles.progress_bar} current={cursor} total={chunks.length}
                      breakpoints={breakpoints}
                      onChangeProgress={progress => this.handleChangeProgress(progress)}
                      onToggleBreakpoint={progress => this.handleToggleBreakpoint(progress)}/>
         <Button icon={faChevronRight} reverse primary disabled={busy || !this.isValidCursor(cursor + 1)}
+                aria-label="Next step" title="Next step"
                 onClick={() => this.next()}/>
         <div className={styles.export}>
           <Button
@@ -320,6 +322,8 @@ class Player extends BaseComponent {
             primary
             disabled={busy}
             inProgress={Boolean(exporting)}
+            aria-haspopup="menu"
+            aria-expanded={exportMenuOpen}
             onClick={() => this.toggleExportMenu()}
           >
             {exporting === 'gif' ? 'GIF…' : exporting === 'webm' ? 'WebM…' : 'Export'}

@@ -1,11 +1,56 @@
-$theme-dark: #242424;
-$theme-normal: #393939;
-$theme-light: #505050;
-$color-font: #bbbbbb;
-$color-shadow: rgba(#000000, .2);
-$color-overlay: rgba(#ffffff, .1);
-$color-alert: #f3bd58;
-$color-selected: #2962ff;
-$color-patched: #c51162;
-$color-highlight: #29d;
-$color-active: #00e676;
+/* Semantic surface scale: dark = deepest panel, light = raised chrome (names are historical). */
+:root,
+[data-theme='dark'] {
+  --theme-dark: #242424;
+  --theme-normal: #393939;
+  --theme-light: #505050;
+  --color-font: #c8c8c8;
+  --color-font-muted: rgba(200, 200, 200, 0.8);
+  --color-shadow: rgba(0, 0, 0, 0.2);
+  --color-overlay: rgba(255, 255, 255, 0.1);
+  --color-alert: #f3bd58;
+  --color-selected: #2962ff;
+  --color-patched: #c51162;
+  --color-highlight: #2299dd;
+  --color-highlight-soft: rgba(34, 153, 221, 0.12);
+  --color-highlight-mid: rgba(34, 153, 221, 0.4);
+  --color-active: #00e676;
+  --button-inset-shadow: #1a1a1a;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+  --focus-ring: #7eb6ff;
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --theme-dark: #ffffff;
+  --theme-normal: #e8ebf0;
+  --theme-light: #cfd5de;
+  --color-font: #1f2937;
+  --color-font-muted: rgba(31, 41, 55, 0.75);
+  --color-shadow: rgba(15, 23, 42, 0.12);
+  --color-overlay: rgba(15, 23, 42, 0.06);
+  --color-alert: #a16207;
+  --color-selected: #1d4ed8;
+  --color-patched: #9d174d;
+  --color-highlight: #0369a1;
+  --color-highlight-soft: rgba(3, 105, 161, 0.12);
+  --color-highlight-mid: rgba(3, 105, 161, 0.35);
+  --color-active: #059669;
+  --button-inset-shadow: rgba(15, 23, 42, 0.18);
+  --chart-grid: rgba(15, 23, 42, 0.08);
+  --focus-ring: #2563eb;
+  color-scheme: light;
+}
+
+$theme-dark: var(--theme-dark);
+$theme-normal: var(--theme-normal);
+$theme-light: var(--theme-light);
+$color-font: var(--color-font);
+$color-shadow: var(--color-shadow);
+$color-overlay: var(--color-overlay);
+$color-alert: var(--color-alert);
+$color-selected: var(--color-selected);
+$color-patched: var(--color-patched);
+$color-highlight: var(--color-highlight);
+$color-active: var(--color-active);
+$button-inset-shadow: var(--button-inset-shadow);

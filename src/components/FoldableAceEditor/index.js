@@ -7,6 +7,7 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_eighties';
+import 'ace-builds/src-noconflict/theme-chrome';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { actions } from 'reducers';
 
@@ -24,6 +25,9 @@ class FoldableAceEditor extends AceEditor {
     const { editingFile, shouldBuild } = this.props.current;
     if (editingFile !== prevProps.current.editingFile) {
       if (shouldBuild) this.foldTracers();
+    }
+    if (this.props.theme !== prevProps.theme && this.editor) {
+      this.editor.setTheme(`ace/theme/${this.props.theme}`);
     }
   }
 

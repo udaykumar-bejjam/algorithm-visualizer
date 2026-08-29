@@ -48,9 +48,9 @@ Complete inventory of the repository for navigation and ownership.
 |------|------|
 | `config.js` | Languages (js/cpp/java), Ace modes, skeletons |
 | `util.js` | `classes`, `distance`, `extension`, gist refine, file factories, `isSaved` |
+| `theme.js` | Dark/light palettes, `applyDocumentTheme`, Chart/Ace helpers |
 | `exportMedia.js` | Capture viewer frames; encode/download GIF & WebM |
-| `theme.js` | Theme tokens for JS (Chart.js, etc.) |
-| `stylesheet/colors.scss` | Theme tokens (+ `:export` for JS) |
+| `stylesheet/colors.scss` | Theme CSS variables (+ SCSS aliases) |
 | `stylesheet/fonts.scss` | Font stacks |
 | `stylesheet/dimensions.scss` | Line height, font sizes |
 | `stylesheet/index.scss` | Barrel for styles |

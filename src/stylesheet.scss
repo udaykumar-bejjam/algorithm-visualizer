@@ -15,6 +15,7 @@ body {
   -webkit-font-smoothing: subpixel-antialiased;
   user-select: none;
   color: $color-font;
+  background-color: $theme-normal;
   font-size: $font-size-normal;
 }
 
@@ -25,6 +26,15 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 input,
@@ -41,4 +51,11 @@ button {
   margin: 0;
   padding: 0;
   line-height: 1.15;
+}
+
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }

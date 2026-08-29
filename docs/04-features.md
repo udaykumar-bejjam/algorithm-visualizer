@@ -9,6 +9,7 @@
 | Document title | Helmet title; `(Unsaved)` prefix when dirty | `App.render` |
 | Toasts | Success/error; auto-hide ~3s | `ToastContainer`, `BaseComponent` |
 | Fullscreen | `screenfull` toggle | `Header` |
+| Theme | Dark / light via Settings; cookie `theme` | `env.setTheme`, CSS `--*` tokens |
 
 ## Algorithm browsing
 

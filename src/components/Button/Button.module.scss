@@ -44,31 +44,11 @@
     background-color: $color-overlay;
   }
 
-  &.primary {
-    &:hover {
-      background-color: $color-shadow;
-
-      &:active {
-        box-shadow: 0px 0px 10px 3px #1a1a1a inset;
-      }
-    }
-
-    &.active {
-      background-color: $color-shadow;
-      box-shadow: 0px 0px 10px 3px #1a1a1a inset;
-      font-weight: bold;
-
-      .icon {
-        color: $color-active;
-      }
-    }
-  }
-
   &.selected {
     background-color: $color-shadow;
 
     &:hover {
-      color: rgba($color-font, .8);
+      color: var(--color-font-muted);
     }
   }
 
@@ -80,5 +60,25 @@
 
   &.confirming {
     color: $color-alert;
+  }
+
+  &.primary {
+    &:hover {
+      background-color: $color-shadow;
+
+      &:active {
+        box-shadow: 0px 0px 10px 3px $button-inset-shadow inset;
+      }
+    }
+
+    &.active {
+      background-color: $color-shadow;
+      box-shadow: 0px 0px 10px 3px $button-inset-shadow inset;
+      font-weight: bold;
+
+      .icon {
+        color: $color-active;
+      }
+    }
   }
 }

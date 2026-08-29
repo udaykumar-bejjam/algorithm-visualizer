@@ -111,7 +111,7 @@ class Header extends BaseComponent {
   render() {
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { scratchPaper, titles, saved } = this.props.current;
-    const { ext, user, autoBuild, soundEnabled } = this.props.env;
+    const { ext, user, autoBuild, soundEnabled, theme } = this.props.env;
 
     const permitted = this.hasPermission();
 
@@ -182,6 +182,10 @@ class Header extends BaseComponent {
                 <ListItem
                   label={soundEnabled ? 'Sound: On' : 'Sound: Off'}
                   onClick={() => this.props.setSoundEnabled(!soundEnabled)}
+                />
+                <ListItem
+                  label={theme === 'light' ? 'Theme: Light' : 'Theme: Dark'}
+                  onClick={() => this.props.setTheme(theme === 'light' ? 'dark' : 'light')}
                 />
               </div>
             </Button>

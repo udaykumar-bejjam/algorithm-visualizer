@@ -33,6 +33,9 @@ class VisualizationViewer extends BaseComponent {
   componentDidUpdate(prevProps) {
     const { chunks, cursor } = this.props.player;
     const { chunks: oldChunks, cursor: oldCursor } = prevProps.player;
+    if (this.props.theme !== prevProps.theme) {
+      this.forceUpdate();
+    }
     if (chunks !== oldChunks) {
       this.clearFrameCache();
       this.update(chunks, cursor, [], 0);
@@ -143,6 +146,6 @@ class VisualizationViewer extends BaseComponent {
   }
 }
 
-export default connect(({ player }) => ({ player }), actions)(
+export default connect(({ player, env }) => ({ player, theme: env.theme }), actions)(
   VisualizationViewer,
 );

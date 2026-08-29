@@ -57,6 +57,7 @@ class Button extends React.Component {
     }
 
     const iconOnly = !children;
+    const ariaLabel = rest['aria-label'] || (iconOnly ? rest.title : undefined);
     const props = {
       className: classes(styles.button, reverse && styles.reverse, selected && styles.selected, disabled && styles.disabled, primary && styles.primary, active && styles.active, iconOnly && styles.icon_only, className),
       to: disabled ? null : to,
@@ -66,13 +67,16 @@ class Button extends React.Component {
         icon && (
           typeof icon === 'string' ?
             <div className={classes(styles.icon, styles.image)} key="icon"
-                 style={{ backgroundImage: `url(${icon})` }} /> :
+                 style={{ backgroundImage: `url(${icon})` }}
+                 aria-hidden="true" /> :
             <FontAwesomeIcon className={styles.icon} fixedWidth icon={inProgress ? faSpinner : icon} spin={inProgress}
-                             key="icon" />
+                             key="icon" aria-hidden="true" />
         ),
         children,
       ],
       ...rest,
+      'aria-label': ariaLabel,
+      'aria-disabled': disabled || undefined,
     };
 
     return to ? (

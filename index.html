@@ -13,6 +13,17 @@
     <link rel="manifest" href="/manifest.json">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
     <title>Algorithm Visualizer</title>
+    <script>
+      (function () {
+        try {
+          var match = document.cookie.match(/(?:^|; )theme=([^;]*)/);
+          var theme = match ? decodeURIComponent(match[1]) : 'dark';
+          document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>
