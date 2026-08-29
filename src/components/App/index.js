@@ -13,21 +13,25 @@ import {
   TabContainer,
   ToastContainer,
   VisualizationViewer,
+  ApiReference,
 } from 'components';
 import { AlgorithmApi, GitHubApi, VisualizationApi } from 'apis';
 import { actions } from 'reducers';
-import { createUserFile, extension, refineGist } from 'common/util';
+import { classes, createUserFile, extension, refineGist } from 'common/util';
 import { exts, languages } from 'common/config';
-import { SCRATCH_PAPER_README_MD } from 'files';
+import { API_REFERENCE_MD, SCRATCH_PAPER_README_MD } from 'files';
 import styles from './App.module.scss';
 
 class App extends BaseComponent {
   constructor(props) {
     super(props);
 
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 900;
     this.state = {
-      workspaceVisibles: [true, true, true],
+      workspaceVisibles: [!isMobile, true, true],
       workspaceWeights: [1, 2, 2],
+      apiReferenceOpened: false,
+      isMobile,
     };
 
     this.codeEditorRef = React.createRef();
@@ -36,6 +40,9 @@ class App extends BaseComponent {
     this.handleClickTitleBar = this.handleClickTitleBar.bind(this);
     this.loadScratchPapers = this.loadScratchPapers.bind(this);
     this.handleChangeWorkspaceWeights = this.handleChangeWorkspaceWeights.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+    this.openApiReference = this.openApiReference.bind(this);
+    this.closeApiReference = this.closeApiReference.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +61,8 @@ class App extends BaseComponent {
       .catch(this.handleError);
 
     this.toggleHistoryBlock(true);
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
@@ -61,6 +70,7 @@ class App extends BaseComponent {
     delete window.signOut;
 
     this.toggleHistoryBlock(false);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   componentDidUpdate(prevProps) {
@@ -219,15 +229,31 @@ class App extends BaseComponent {
     this.toggleNavigatorOpened();
   }
 
+  handleResize() {
+    const isMobile = window.innerWidth < 900;
+    if (isMobile === this.state.isMobile) return;
+    const workspaceVisibles = [...this.state.workspaceVisibles];
+    if (isMobile) workspaceVisibles[0] = false;
+    this.setState({ isMobile, workspaceVisibles });
+  }
+
+  openApiReference() {
+    this.setState({ apiReferenceOpened: true });
+  }
+
+  closeApiReference() {
+    this.setState({ apiReferenceOpened: false });
+  }
+
   render() {
-    const { workspaceVisibles, workspaceWeights } = this.state;
+    const { workspaceVisibles, workspaceWeights, apiReferenceOpened, isMobile } = this.state;
     const { titles, description, saved } = this.props.current;
 
     const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
     const [navigatorOpened] = workspaceVisibles;
 
     return (
-      <div className={styles.app}>
+      <div className={classes(styles.app, isMobile && styles.mobile)}>
         <Helmet>
           <title>{title}</title>
           <meta name="description" content={description}/>
@@ -235,15 +261,19 @@ class App extends BaseComponent {
         <Header className={styles.header} onClickTitleBar={this.handleClickTitleBar}
                 navigatorOpened={navigatorOpened} loadScratchPapers={this.loadScratchPapers}
                 ignoreHistoryBlock={this.ignoreHistoryBlock}/>
-        <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
+        <ResizableContainer className={styles.workspace} horizontal={!isMobile} weights={workspaceWeights}
                             visibles={workspaceVisibles} onChangeWeights={this.handleChangeWorkspaceWeights}>
-          <Navigator/>
+          <Navigator onOpenApiReference={this.openApiReference}/>
           <VisualizationViewer className={styles.visualization_viewer}/>
           <TabContainer className={styles.editor_tab_container}>
             <CodeEditor ref={this.codeEditorRef}/>
           </TabContainer>
         </ResizableContainer>
         <ToastContainer className={styles.toast_container}/>
+        {
+          apiReferenceOpened &&
+          <ApiReference markdown={API_REFERENCE_MD} onClose={this.closeApiReference}/>
+        }
       </div>
     );
   }

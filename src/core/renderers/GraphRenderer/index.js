@@ -26,9 +26,11 @@ class GraphRenderer extends Renderer {
     if (this.selectedNode) {
       const { x, y } = this.computeCoords(e);
       const node = this.props.data.findNode(this.selectedNode.id);
-      node.x = x;
-      node.y = y;
-      this.refresh();
+      if (node) {
+        node.x = x;
+        node.y = y;
+        this.refresh();
+      }
     } else {
       super.handleMouseMove(e);
     }
@@ -43,15 +45,47 @@ class GraphRenderer extends Renderer {
     return { x, y };
   }
 
+  getViewBox() {
+    const { nodes, dimensions } = this.props.data;
+    const { baseWidth, baseHeight, padding, nodeRadius } = dimensions;
+    if (!nodes || !nodes.length) {
+      return [
+        (this.centerX - baseWidth / 2) * this.zoom,
+        (this.centerY - baseHeight / 2) * this.zoom,
+        baseWidth * this.zoom,
+        baseHeight * this.zoom,
+      ];
+    }
+
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    nodes.forEach(({ x, y }) => {
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+    });
+
+    const margin = padding + nodeRadius * 2;
+    const width = Math.max(baseWidth, (maxX - minX) + margin * 2);
+    const height = Math.max(baseHeight, (maxY - minY) + margin * 2);
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+
+    return [
+      (this.centerX + midX - width / 2) * this.zoom,
+      (this.centerY + midY - height / 2) * this.zoom,
+      width * this.zoom,
+      height * this.zoom,
+    ];
+  }
+
   renderData() {
     const { nodes, edges, isDirected, isWeighted, dimensions } = this.props.data;
-    const { baseWidth, baseHeight, nodeRadius, arrowGap, nodeWeightGap, edgeWeightGap } = dimensions;
-    const viewBox = [
-      (this.centerX - baseWidth / 2) * this.zoom,
-      (this.centerY - baseHeight / 2) * this.zoom,
-      baseWidth * this.zoom,
-      baseHeight * this.zoom,
-    ];
+    const { nodeRadius, arrowGap, nodeWeightGap, edgeWeightGap } = dimensions;
+    const viewBox = this.getViewBox();
     return (
       <svg className={styles.graph} viewBox={viewBox} ref={this.elementRef}>
         <defs>
@@ -123,4 +157,3 @@ class GraphRenderer extends Renderer {
 }
 
 export default GraphRenderer;
-

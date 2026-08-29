@@ -71,6 +71,24 @@ const chunkCommands = (commands = []) => {
   return chunks;
 };
 
+const validateCommands = (commands) => {
+  if (!Array.isArray(commands)) {
+    throw new Error('Visualization commands must be an array');
+  }
+  commands.forEach((command, index) => {
+    if (!command || typeof command !== 'object') {
+      throw new Error(`Invalid command at index ${index}`);
+    }
+    if (!('method' in command) || typeof command.method !== 'string') {
+      throw new Error(`Command at index ${index} is missing a method`);
+    }
+    if (!('args' in command) || !Array.isArray(command.args)) {
+      throw new Error(`Command at index ${index} is missing args`);
+    }
+  });
+  return commands;
+};
+
 export {
   classes,
   distance,
@@ -82,4 +100,5 @@ export {
   createUserFile,
   isSaved,
   chunkCommands,
+  validateCommands,
 };

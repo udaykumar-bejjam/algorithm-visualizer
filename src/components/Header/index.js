@@ -111,7 +111,7 @@ class Header extends BaseComponent {
   render() {
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { scratchPaper, titles, saved } = this.props.current;
-    const { ext, user } = this.props.env;
+    const { ext, user, autoBuild, soundEnabled } = this.props.env;
 
     const permitted = this.hasPermission();
 
@@ -170,6 +170,19 @@ class Header extends BaseComponent {
                               label={language.name}/>
                   ))
                 }
+              </div>
+            </Button>
+            <Button className={styles.btn_dropdown}>
+              Settings
+              <div className={styles.dropdown}>
+                <ListItem
+                  label={autoBuild ? 'Auto-Build: On' : 'Auto-Build: Off'}
+                  onClick={() => this.props.setAutoBuild(!autoBuild)}
+                />
+                <ListItem
+                  label={soundEnabled ? 'Sound: On' : 'Sound: Off'}
+                  onClick={() => this.props.setSoundEnabled(!soundEnabled)}
+                />
               </div>
             </Button>
           </div>

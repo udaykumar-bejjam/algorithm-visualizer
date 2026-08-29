@@ -27,4 +27,19 @@
     right: 0;
     z-index: 99;
   }
+
+  &.mobile {
+    .workspace {
+      min-height: 0;
+    }
+  }
+}
+
+@media (max-width: 899px) {
+  .app {
+    .toast_container {
+      left: 0;
+      right: 0;
+    }
+  }
 }

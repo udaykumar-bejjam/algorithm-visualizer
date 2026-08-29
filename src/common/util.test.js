@@ -5,6 +5,7 @@ import {
   extension,
   isSaved,
   refineGist,
+  validateCommands,
 } from './util';
 
 describe('classes', () => {
@@ -106,5 +107,17 @@ describe('createSeededRandom', () => {
     const a = createSeededRandom(1);
     const b = createSeededRandom(2);
     expect(a()).not.toBe(b());
+  });
+});
+
+describe('validateCommands', () => {
+  it('accepts a valid command list', () => {
+    const commands = [{ key: 'a', method: 'Array1DTracer', args: ['A'] }];
+    expect(validateCommands(commands)).toBe(commands);
+  });
+
+  it('rejects non-arrays and malformed commands', () => {
+    expect(() => validateCommands(null)).toThrow(/array/i);
+    expect(() => validateCommands([{ method: 'set' }])).toThrow(/args/i);
   });
 });

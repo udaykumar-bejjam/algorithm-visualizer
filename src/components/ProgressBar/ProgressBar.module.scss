@@ -20,6 +20,16 @@
     background-color: $color-active;
   }
 
+  .breakpoint {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    background-color: $color-alert;
+    z-index: 1;
+  }
+
   .label {
     position: absolute;
     color: $theme-dark;

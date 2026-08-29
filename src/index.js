@@ -19,3 +19,11 @@ ReactDOM.render(
       </Switch>
     </BrowserRouter>
   </Provider>, document.getElementById('root'));
+
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`).catch(() => {
+      // Service worker optional
+    });
+  });
+}

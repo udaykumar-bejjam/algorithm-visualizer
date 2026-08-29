@@ -123,7 +123,7 @@ class Navigator extends React.Component {
             }
           </ExpandableListItem>
           <ListItem icon={faBook} label="API Reference"
-                    href="https://github.com/algorithm-visualizer/algorithm-visualizer/wiki"/>
+                    onClick={() => this.props.onOpenApiReference && this.props.onOpenApiReference()}/>
           <ListItem icon={faGithub} label="Fork me on GitHub"
                     href="https://github.com/algorithm-visualizer/algorithm-visualizer"/>
         </div>

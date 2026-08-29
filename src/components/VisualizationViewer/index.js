@@ -82,12 +82,15 @@ class VisualizationViewer extends BaseComponent {
 
   render() {
     const { className } = this.props;
+    const { cursor } = this.props.player;
 
     return (
       <div className={classes(styles.visualization_viewer, className)}>
-        {
-          this.root && this.root.render()
-        }
+        <div className={styles.fade} key={cursor}>
+          {
+            this.root && this.root.render()
+          }
+        </div>
       </div>
     );
   }
