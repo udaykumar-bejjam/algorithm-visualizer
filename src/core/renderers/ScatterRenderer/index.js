@@ -13,7 +13,7 @@ class ScatterRenderer extends Array2DRenderer {
         {
           backgroundColor: colors[index],
           data: series.map(s => convertToObjectArray(s.value)),
-          label: Math.random(),
+          label: `Series ${index + 1}`,
           radius: (index + 1) * 2,
         }))
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Renderer } from 'core/renderers';
+import Renderer from '../Renderer';
 import { classes, distance } from 'common/util';
 import styles from './GraphRenderer.module.scss';
 

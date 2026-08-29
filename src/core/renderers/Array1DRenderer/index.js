@@ -1,7 +1,8 @@
-import { Array2DRenderer } from 'core/renderers';
+import Array2DRenderer from '../Array2DRenderer';
 
 class Array1DRenderer extends Array2DRenderer {
 }
 
-export default Array1DRenderer;
+Array1DRenderer.is1D = true;
 
+export default Array1DRenderer;

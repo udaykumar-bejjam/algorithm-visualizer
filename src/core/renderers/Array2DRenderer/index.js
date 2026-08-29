@@ -1,5 +1,5 @@
 import React from 'react';
-import { Array1DRenderer, Renderer } from 'core/renderers';
+import Renderer from '../Renderer';
 import styles from './Array2DRenderer.module.scss';
 import { classes } from 'common/util';
 
@@ -14,7 +14,7 @@ class Array2DRenderer extends Renderer {
   renderData() {
     const { data } = this.props.data;
 
-    const isArray1D = this instanceof Array1DRenderer;
+    const isArray1D = this.constructor.is1D;
     let longestRow = data.reduce((longestRow, row) => longestRow.length < row.length ? row : longestRow, []);
 
     return (
@@ -60,5 +60,6 @@ class Array2DRenderer extends Renderer {
   }
 }
 
-export default Array2DRenderer;
+Array2DRenderer.is1D = false;
 
+export default Array2DRenderer;

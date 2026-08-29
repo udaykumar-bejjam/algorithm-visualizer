@@ -1,6 +1,6 @@
-import { Tracer } from 'core/tracers';
-import { distance } from 'common/util';
-import { GraphRenderer } from 'core/renderers';
+import Tracer from './Tracer';
+import { distance, createSeededRandom } from 'common/util';
+import { GraphRenderer } from '../renderers';
 
 class GraphTracer extends Tracer {
   getRendererClass() {
@@ -22,6 +22,7 @@ class GraphTracer extends Tracer {
     this.isWeighted = false;
     this.callLayout = { method: this.layoutCircle, args: [] };
     this.logTracer = null;
+    this.randomSeed = null;
   }
 
   set(array2d = []) {
@@ -206,14 +207,16 @@ class GraphTracer extends Tracer {
     recursivePosition(rootNode, 0, 0);
   }
 
-  layoutRandom() {
-    this.callLayout = { method: this.layoutRandom, args: arguments };
+  layoutRandom(seed = this.randomSeed == null ? Date.now() : this.randomSeed) {
+    this.randomSeed = seed;
+    this.callLayout = { method: this.layoutRandom, args: [seed] };
+    const random = createSeededRandom(seed);
     const rect = this.getRect();
     const placedNodes = [];
     for (const node of this.nodes) {
       do {
-        node.x = rect.left + Math.random() * rect.width;
-        node.y = rect.top + Math.random() * rect.height;
+        node.x = rect.left + random() * rect.width;
+        node.y = rect.top + random() * rect.height;
       } while (placedNodes.find(placedNode => distance(node, placedNode) < 48));
       placedNodes.push(node);
     }

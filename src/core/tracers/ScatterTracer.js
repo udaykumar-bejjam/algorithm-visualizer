@@ -1,5 +1,5 @@
-import { Array2DTracer } from 'core/tracers';
-import { ScatterRenderer } from 'core/renderers';
+import Array2DTracer from './Array2DTracer';
+import { ScatterRenderer } from '../renderers';
 
 class ScatterTracer extends Array2DTracer {
   getRendererClass() {

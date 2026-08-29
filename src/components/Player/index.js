@@ -7,7 +7,7 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension } from 'common/util';
+import { classes, extension, chunkCommands } from 'common/util';
 import { TracerApi } from 'apis';
 import { actions } from 'reducers';
 import { BaseComponent, Button, ProgressBar } from 'components';
@@ -49,24 +49,7 @@ class Player extends BaseComponent {
   }
 
   reset(commands = []) {
-    const chunks = [{
-      commands: [],
-      lineNumber: undefined,
-    }];
-    while (commands.length) {
-      const command = commands.shift();
-      const { key, method, args } = command;
-      if (key === null && method === 'delay') {
-        const [lineNumber] = args;
-        chunks[chunks.length - 1].lineNumber = lineNumber;
-        chunks.push({
-          commands: [],
-          lineNumber: undefined,
-        });
-      } else {
-        chunks[chunks.length - 1].commands.push(command);
-      }
-    }
+    const chunks = chunkCommands(commands);
     this.props.setChunks(chunks);
     this.props.setCursor(0);
     this.pause();

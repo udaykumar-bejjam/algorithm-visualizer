@@ -1,5 +1,5 @@
-import { Tracer } from 'core/tracers';
-import { MarkdownRenderer } from 'core/renderers';
+import Tracer from './Tracer';
+import { MarkdownRenderer } from '../renderers';
 
 class MarkdownTracer extends Tracer {
   getRendererClass() {

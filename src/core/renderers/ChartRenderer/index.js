@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Array1DRenderer } from 'core/renderers';
+import Array1DRenderer from '../Array1DRenderer';
 import styles from './ChartRenderer.module.scss';
 
 class ChartRenderer extends Array1DRenderer {
