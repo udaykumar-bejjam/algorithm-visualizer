@@ -13,6 +13,13 @@
     <link rel="manifest" href="/manifest.json">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
     <title>Algorithm Visualizer</title>
+    <script>
+      // Some dependencies (e.g. vfile, used by react-markdown) reference Node
+      // globals that do not exist in the browser under Vite. Provide minimal
+      // shims so those modules load without a "process is not defined" error.
+      window.global = window.global || window;
+      window.process = window.process || { env: {}, cwd: function () { return '/'; }, browser: true };
+    </script>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>

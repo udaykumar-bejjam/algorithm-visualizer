@@ -1,0 +1,26 @@
+{
+  "name": "Algorithm Visualizer",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "backend",
+      "command": "cd \"$HOME/algorithm-visualizer-server\" && npm run watch",
+      "description": "Algorithm Visualizer backend server (algorithm catalog + JS tracer worker) on port 8080. The web app proxies /api to it."
+    },
+    {
+      "name": "web",
+      "command": "npm start",
+      "description": "Vite dev server for the Algorithm Visualizer web app on http://localhost:3000."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 3000
+    },
+    {
+      "name": "api",
+      "port": 8080
+    }
+  ]
+}
