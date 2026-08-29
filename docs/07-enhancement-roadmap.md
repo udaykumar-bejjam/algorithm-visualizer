@@ -59,7 +59,7 @@ Prioritized improvements based on a full codebase review. Difficulty is expresse
 | ID | Enhancement | Why | Scope |
 |----|-------------|-----|-------|
 | P4.1 | TreeTracer / LinkedListTracer specialized renderers | Common CS structures awkwardly faked with Graph | Medium–large |
-| P4.2 | Upgrade Chart.js v3+; stable scatter labels; theme colors | Random labels; outdated API | Medium |
+| P4.2 | Upgrade Chart.js v3+; stable scatter labels; theme colors | Random labels; outdated API | **Done** — Chart.js 4 + react-chartjs-2 5 |
 | P4.3 | Auto-fit Graph viewBox to container | Fixed 320×320 base feels cramped | Small–medium |
 | P4.4 | Selected/patched styling for Scatter | Parity with Chart/Array | Small |
 | P4.5 | Animation easing between chunks | Abrupt frame cuts | Medium |

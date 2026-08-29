@@ -1,63 +1,71 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import Array2DRenderer from '../Array2DRenderer';
-import { colorPatched, colorSelected, seriesColors } from 'common/theme';
+import { colorFont, colorPatched, colorSelected, seriesColors } from 'common/theme';
+import { ensureChartJsSetup } from '../chartSetup';
+import styles from './ScatterRenderer.module.scss';
+
+ensureChartJsSetup();
 
 const convertToObjectArray = (value) => {
   if (Array.isArray(value)) {
     const [x, y] = value;
     return { x, y };
   }
-  return { x: 0, y: value };
+  return { x: 0, y: Number(value) || 0 };
 };
 
 class ScatterRenderer extends Array2DRenderer {
   renderData() {
-    const { data } = this.props.data;
+    const { data = [] } = this.props.data;
 
     const datasets = data.map((series, index) => ({
+      label: `Series ${index + 1}`,
+      data: series.map(s => convertToObjectArray(s.value)),
       backgroundColor: series.map(point => (
         point.patched ? colorPatched :
           point.selected ? colorSelected :
             seriesColors[index % seriesColors.length]
       )),
-      data: series.map(s => convertToObjectArray(s.value)),
-      label: `Series ${index + 1}`,
       pointRadius: series.map(point => (point.selected || point.patched ? 6 : (index + 1) * 2)),
+      pointHoverRadius: series.map(point => (point.selected || point.patched ? 7 : (index + 1) * 2 + 1)),
     }));
 
-    const chartData = {
-      datasets,
-    };
-
     return (
-      <Scatter
-        data={chartData}
-        options={{
-          legend: false,
-          animation: false,
-          layout: {
-            padding: {
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: 20,
+      <div className={styles.chart}>
+        <Scatter
+          data={{ datasets }}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            layout: {
+              padding: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+              },
             },
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: true },
+            },
+            scales: {
+              x: {
+                type: 'linear',
+                ticks: { color: colorFont },
+                grid: { color: 'rgba(255,255,255,0.08)' },
               },
-            }],
-            xAxes: [{
-              ticks: {
-                beginAtZero: false,
+              y: {
+                type: 'linear',
+                ticks: { color: colorFont },
+                grid: { color: 'rgba(255,255,255,0.08)' },
               },
-            }],
-          },
-        }}
-      />
+            },
+          }}
+        />
+      </div>
     );
   }
 }

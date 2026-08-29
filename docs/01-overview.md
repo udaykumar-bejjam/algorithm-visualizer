@@ -39,7 +39,7 @@ This repository is **only the web client**. Compiling/running code, OAuth, and a
 | Build | Vite 5 |
 | Styles | SCSS modules + shared tokens in `src/common/stylesheet` |
 | Editor | react-ace / brace (Tomorrow Night Eighties theme) |
-| Charts | chart.js 2 + react-chartjs-2 |
+| Charts | chart.js 4 + react-chartjs-2 5 |
 | HTTP | axios 0.27 (response interceptor unwraps `.data`) |
 | Icons | Font Awesome (legacy free packages + svg-core) |
 | Auth storage | js-cookie (`access_token`, `ext`) |
