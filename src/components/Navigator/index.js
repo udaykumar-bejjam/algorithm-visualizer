@@ -52,15 +52,15 @@ class Navigator extends React.Component {
     const categoriesOpened = {};
     const query = e.target.value;
     categories.forEach(category => {
-      if (this.testQuery(category.name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
+      if (this.testQuery(category.name, query) ||
+        category.algorithms.find(algorithm => this.testQuery(algorithm.name, query))) {
         categoriesOpened[category.key] = true;
       }
     });
     this.setState({ categoriesOpened, query });
   }
 
-  testQuery(value) {
-    const { query } = this.state;
+  testQuery(value, query = this.state.query) {
     const refine = string => string.replace(/-/g, ' ').replace(/[^\w ]/g, '');
     const refinedQuery = refine(query);
     const refinedValue = refine(value);

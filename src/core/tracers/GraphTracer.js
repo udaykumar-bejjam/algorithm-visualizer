@@ -56,6 +56,7 @@ class GraphTracer extends Tracer {
 
   updateNode(id, weight, x, y, visitedCount, selectedCount) {
     const node = this.findNode(id);
+    if (!node) return;
     const update = { weight, x, y, visitedCount, selectedCount };
     Object.keys(update).forEach(key => {
       if (update[key] === undefined) delete update[key];
@@ -68,6 +69,7 @@ class GraphTracer extends Tracer {
     if (!node) return;
     const index = this.nodes.indexOf(node);
     this.nodes.splice(index, 1);
+    this.edges = this.edges.filter(edge => edge.source !== id && edge.target !== id);
     this.layout();
   }
 
@@ -79,6 +81,7 @@ class GraphTracer extends Tracer {
 
   updateEdge(source, target, weight, visitedCount, selectedCount) {
     const edge = this.findEdge(source, target);
+    if (!edge) return;
     const update = { weight, visitedCount, selectedCount };
     Object.keys(update).forEach(key => {
       if (update[key] === undefined) delete update[key];
@@ -228,6 +231,7 @@ class GraphTracer extends Tracer {
     const edge = this.findEdge(source, target);
     if (edge) edge.visitedCount += visit ? 1 : -1;
     const node = this.findNode(target);
+    if (!node) return;
     if (weight !== undefined) node.weight = weight;
     node.visitedCount += visit ? 1 : -1;
     if (this.logTracer) {
@@ -247,6 +251,7 @@ class GraphTracer extends Tracer {
     const edge = this.findEdge(source, target);
     if (edge) edge.selectedCount += select ? 1 : -1;
     const node = this.findNode(target);
+    if (!node) return;
     node.selectedCount += select ? 1 : -1;
     if (this.logTracer) {
       this.logTracer.println(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);

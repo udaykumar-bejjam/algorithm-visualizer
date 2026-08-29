@@ -27,6 +27,11 @@ class Divider extends React.Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
   render() {
     const { className, horizontal } = this.props;
 

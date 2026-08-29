@@ -33,6 +33,14 @@ class Player extends BaseComponent {
     if (shouldBuild) this.build(editingFile);
   }
 
+  componentWillUnmount() {
+    this.pause();
+    if (this.tracerApiSource) {
+      this.tracerApiSource.cancel();
+      this.tracerApiSource = null;
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { editingFile, shouldBuild } = nextProps.current;
     if (editingFile !== this.props.current.editingFile) {
@@ -109,17 +117,23 @@ class Player extends BaseComponent {
 
   resume(wrap = false) {
     this.pause();
-    if (this.next() || (wrap && this.props.setCursor(1))) {
-      const interval = 4000 / Math.pow(Math.E, this.state.speed);
-      this.timer = window.setTimeout(() => this.resume(), interval);
-      this.setState({ playing: true });
+    let advanced = this.next();
+    if (!advanced && wrap && this.isValidCursor(1)) {
+      this.props.setCursor(1);
+      advanced = true;
     }
+    if (!advanced) return;
+    const interval = 4000 / Math.pow(Math.E, this.state.speed);
+    this.timer = window.setTimeout(() => this.resume(), interval);
+    this.setState({ playing: true });
   }
 
   pause() {
     if (this.timer) {
       window.clearTimeout(this.timer);
       this.timer = undefined;
+    }
+    if (this.state.playing) {
       this.setState({ playing: false });
     }
   }

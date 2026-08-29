@@ -31,12 +31,18 @@ class ProgressBar extends React.Component {
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
   render() {
     const { className, total, current } = this.props;
+    const percent = total > 0 ? (current / total) * 100 : 0;
 
     return (
       <div className={classes(styles.progress_bar, className)} onMouseDown={this.handleMouseDown}>
-        <div className={styles.active} style={{ width: `${current / total * 100}%` }} />
+        <div className={styles.active} style={{ width: `${percent}%` }} />
         <div className={styles.label}>
           <span className={styles.current}>{current}</span> / {total}
         </div>

@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import { combineReducers, createStore } from 'redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { routerReducer } from 'react-router-redux';
 import App from 'components/App';
-import * as reducers from 'reducers';
+import { current, directory, env, player, toast } from 'reducers';
 import './stylesheet.scss';
 
-const store = createStore(combineReducers({ ...reducers, routing: routerReducer }));
+const store = createStore(combineReducers({ current, directory, env, player, toast }));
 
 ReactDOM.render(
   <Provider store={store}>
