@@ -15,4 +15,4 @@ This folder documents the **frontend** repository (`algorithm-visualizer/algorit
 
 **Live site:** [algorithm-visualizer.org](https://algorithm-visualizer.org/)  
 **License:** MIT  
-**Primary stack:** React 16 + Redux + CRA 3 + SCSS modules
+**Primary stack:** React 18 + Redux + Vite 5 + SCSS modules
